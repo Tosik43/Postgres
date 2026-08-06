@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-primary text-white">
+
+        <h3 class="mb-0">
+            Карточка студента
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th width="250">ФИО</th>
+                <td>{{ student.full_name }}</td>
+            </tr>
+
+            <tr>
+                <th>Дата рождения</th>
+                <td>{{ student.birth_date|date:"d.m.Y" }}</td>
+            </tr>
+
+            <tr>
+                <th>Пол</th>
+                <td>{{ student.get_gender_display }}</td>
+            </tr>
+
+            <tr>
+                <th>СНИЛС</th>
+                <td>{{ student.snils }}</td>
+            </tr>
+
+            <tr>
+                <th>Email</th>
+                <td>{{ student.email }}</td>
+            </tr>
+
+            <tr>
+                <th>Телефон</th>
+                <td>{{ student.phone }}</td>
+            </tr>
+
+            <tr>
+                <th>Статус</th>
+                <td>{{ student.get_study_status_display }}</td>
+            </tr>
+
+            {% if student.study_status == "expelled" %}
+            <tr>
+                <th>Причина отчисления</th>
+                <td>{{ student.expulsion_reason }}</td>
+            </tr>
+            {% endif %}
+
+        </table>
+
+        <a href="{% url 'student_edit' student.id %}"
+           class="btn btn-warning">
+            Редактировать
+        </a>
+
+        <a href="{% url 'student_list' %}"
+           class="btn btn-secondary">
+            Назад
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

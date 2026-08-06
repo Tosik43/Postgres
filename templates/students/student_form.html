@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}
+Редактирование студента
+{% endblock %}
+
+{% block content %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-primary text-white">
+
+        <h3 class="mb-0">
+            Редактирование студента
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.full_name.label }}</label>
+                    {{ form.full_name }}
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">{{ form.birth_date.label }}</label>
+                    {{ form.birth_date }}
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">{{ form.gender.label }}</label>
+                    {{ form.gender }}
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">{{ form.snils.label }}</label>
+                    {{ form.snils }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">{{ form.phone.label }}</label>
+                    {{ form.phone }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">{{ form.email.label }}</label>
+                    {{ form.email }}
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.vk.label }}</label>
+                    {{ form.vk }}
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">{{ form.enrollment_year.label }}</label>
+                    {{ form.enrollment_year }}
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">{{ form.graduation_year.label }}</label>
+                    {{ form.graduation_year }}
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.study_status.label }}</label>
+                    {{ form.study_status }}
+                </div>
+
+            </div>
+
+            <div class="row" id="expulsion-row">
+
+                <div class="col-12 mb-3">
+
+                    <label class="form-label">
+                        {{ form.expulsion_reason.label }}
+                    </label>
+
+                    {{ form.expulsion_reason }}
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <button type="submit" class="btn btn-success">
+                💾 Сохранить
+            </button>
+
+            <a href="{% url 'student_detail' student.id %}"
+               class="btn btn-secondary">
+                Отмена
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+function toggleReason() {
+
+    const status = document.getElementById("id_study_status").value;
+
+    const row = document.getElementById("expulsion-row");
+
+    if (status === "expelled") {
+
+        row.style.display = "block";
+
+    } else {
+
+        row.style.display = "none";
+
+    }
+
+}
+
+document
+    .getElementById("id_study_status")
+    .addEventListener("change", toggleReason);
+
+toggleReason();
+
+</script>
+
+{% endblock %}
