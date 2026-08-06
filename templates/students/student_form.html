@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}
 Редактирование студента
 {% endblock %}
@@ -119,32 +121,6 @@
 
 </div>
 
-<script>
-
-function toggleReason() {
-
-    const status = document.getElementById("id_study_status").value;
-
-    const row = document.getElementById("expulsion-row");
-
-    if (status === "expelled") {
-
-        row.style.display = "block";
-
-    } else {
-
-        row.style.display = "none";
-
-    }
-
-}
-
-document
-    .getElementById("id_study_status")
-    .addEventListener("change", toggleReason);
-
-toggleReason();
-
-</script>
+<script src="{% static 'students/js/student_form.js' %}"></script>
 
 {% endblock %}
