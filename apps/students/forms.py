@@ -26,6 +26,7 @@ class StudentForm(forms.ModelForm):
         widgets = {
 
             "birth_date": forms.DateInput(
+                format="%Y-%m-%d",
                 attrs={
                     "type": "date",
                     "class": "form-control",
@@ -42,10 +43,20 @@ class StudentForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
-        for field in self.fields.values():
+        self.fields["birth_date"].input_formats = ["%Y-%m-%d"]
 
-            if "class" not in field.widget.attrs:
-                field.widget.attrs["class"] = "form-control"
+        self.fields["snils"].widget.attrs["placeholder"] = "___-___-___ __"
+        self.fields["phone"].widget.attrs["placeholder"] = "+7 (___) ___-__-__"
+
+        self.fields["snils"].widget.attrs.pop("maxlength", None)
+        self.fields["phone"].widget.attrs.pop("maxlength", None)
+
+        for field_name, field in self.fields.items():
+            css_class = field.widget.attrs.get("class", "form-control")
+
+            if self.is_bound and field_name in self.errors:
+                field.widget.attrs["class"] = f"{css_class} is-invalid"
+            else:
+                field.widget.attrs["class"] = css_class

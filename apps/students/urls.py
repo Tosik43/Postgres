@@ -15,6 +15,11 @@ urlpatterns = [
     views.student_edit,
     name="student_edit",
 ),
+    path(
+    "add/", 
+    views.student_create, 
+    name="student_create"
+),
 
 ]
 

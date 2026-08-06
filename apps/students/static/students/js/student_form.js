@@ -14,8 +14,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    statusField.addEventListener("change", toggleReason);
+    if (statusField) {
+        statusField.addEventListener("change", toggleReason);
+        toggleReason();
+    }
 
-    toggleReason();
+    const snilsInput = document.getElementById("id_snils");
+    if (snilsInput) {
+        IMask(snilsInput, {
+            mask: "000-000-000 00",
+        });
+    }
+
+    const phoneInput = document.getElementById("id_phone");
+    if (phoneInput) {
+        IMask(phoneInput, {
+            mask: "+{7} (000) 000-00-00",
+        });
+    }
 
 });

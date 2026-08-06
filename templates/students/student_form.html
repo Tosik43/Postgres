@@ -3,7 +3,11 @@
 {% load static %}
 
 {% block title %}
-Редактирование студента
+    {% if student %}
+    Редактирование студента
+    {% else %}
+    Добавление студента
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -13,14 +17,26 @@
     <div class="card-header bg-primary text-white">
 
         <h3 class="mb-0">
-            Редактирование студента
+            {% if student %}
+                Редактирование студента
+            {% else %}
+                Добавление студента
+            {% endif %}
         </h3>
 
     </div>
 
     <div class="card-body">
 
-        <form method="post">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" novalidate>
 
             {% csrf_token %}
 
@@ -29,16 +45,31 @@
                 <div class="col-md-6 mb-3">
                     <label class="form-label">{{ form.full_name.label }}</label>
                     {{ form.full_name }}
+                    {% if form.full_name.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.full_name.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <label class="form-label">{{ form.birth_date.label }}</label>
                     {{ form.birth_date }}
+                    {% if form.birth_date.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.birth_date.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <label class="form-label">{{ form.gender.label }}</label>
                     {{ form.gender }}
+                    {% if form.gender.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.gender.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
             </div>
@@ -48,11 +79,21 @@
                 <div class="col-md-4 mb-3">
                     <label class="form-label">{{ form.snils.label }}</label>
                     {{ form.snils }}
+                    {% if form.snils.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.snils.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">{{ form.phone.label }}</label>
                     {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.phone.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="col-md-4 mb-3">
@@ -72,6 +113,11 @@
                 <div class="col-md-3 mb-3">
                     <label class="form-label">{{ form.enrollment_year.label }}</label>
                     {{ form.enrollment_year }}
+                    {% if form.enrollment_year.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.enrollment_year.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="col-md-3 mb-3">
@@ -86,6 +132,11 @@
                 <div class="col-md-6 mb-3">
                     <label class="form-label">{{ form.study_status.label }}</label>
                     {{ form.study_status }}
+                    {% if form.study_status.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.study_status.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
             </div>
@@ -100,6 +151,12 @@
 
                     {{ form.expulsion_reason }}
 
+                    {% if form.expulsion_reason.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.expulsion_reason.errors.0 }}
+                        </div>
+                    {% endif %}
+
                 </div>
 
             </div>
@@ -110,10 +167,15 @@
                 💾 Сохранить
             </button>
 
-            <a href="{% url 'student_detail' student.id %}"
-               class="btn btn-secondary">
-                Отмена
-            </a>
+            {% if student %}
+                <a href="{% url 'student_detail' student.id %}" class="btn btn-secondary">
+                    Отмена
+                </a>
+            {% else %}
+                <a href="{% url 'student_list' %}" class="btn btn-secondary">
+                    Отмена
+                </a>
+            {% endif %}
 
         </form>
 
@@ -121,6 +183,7 @@
 
 </div>
 
+<script src="https://unpkg.com/imask"></script>
 <script src="{% static 'students/js/student_form.js' %}"></script>
 
 {% endblock %}
