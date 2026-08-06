@@ -4,6 +4,7 @@ from .models import Student
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from .forms import StudentForm
+from django.contrib import messages
 
 def student_list(request):
 
@@ -46,7 +47,16 @@ def student_create(request):
         form = StudentForm(request.POST)
         if form.is_valid():
             student = form.save()
-            return redirect("student_detail", pk=student.pk)
+
+            messages.success(
+                request,
+                "Студент успешно добавлен."
+            )
+
+            return redirect(
+                "student_detail",
+                pk=student.pk
+            )
     else:
         form = StudentForm()
 
@@ -74,7 +84,15 @@ def student_edit(request, pk):
 
             form.save()
 
-            return redirect("student_detail", pk=student.pk)
+            messages.success(
+                request,
+                "Данные студента успешно сохранены."
+            )
+
+            return redirect(
+                "student_detail",
+                pk=student.pk
+            )
 
     else:
 

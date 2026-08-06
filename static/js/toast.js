@@ -1,0 +1,9 @@
+document.addEventListener("DOMContentLoaded", function () {
+
+    document.querySelectorAll(".toast").forEach(function (element) {
+
+        new bootstrap.Toast(element).show();
+
+    });
+
+});
