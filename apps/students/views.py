@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import render
-from .models import Student
+from .models import Student, StudyStatus, Gender
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from .forms import StudentForm
@@ -10,7 +10,15 @@ from django.utils import timezone
 def student_list(request):
 
     query = request.GET.get("q", "")
-    students = Student.objects.filter(is_active=True)
+    status = request.GET.get("status", "")
+    gender = request.GET.get("gender", "")
+    year = request.GET.get("year", "")
+    sort = request.GET.get("sort", "full_name")
+    direction = request.GET.get("direction", "asc")
+
+    students = Student.objects.filter(
+        is_active=True
+    )
 
     if query:
         students = students.filter(
@@ -18,12 +26,60 @@ def student_list(request):
             Q(snils__icontains=query)
         )
 
+    if status:
+        students = students.filter(
+            study_status=status
+        )
+
+    if gender:
+        students = students.filter(
+            gender=gender
+        )
+
+    if year:
+        students = students.filter(
+            enrollment_year=year
+        )
+
+    allowed_sort_fields = {
+        "full_name": "full_name",
+        "snils": "snils",
+        "study_status": "study_status",
+        "enrollment_year": "enrollment_year",
+    }
+
+    sort_field = allowed_sort_fields.get(sort, "full_name")
+
+    if direction == "desc":
+        students = students.order_by(f"-{sort_field}")
+    else:
+        students = students.order_by(sort_field)
+
+    years = (
+        Student.objects
+        .filter(is_active=True)
+        .values_list(
+            "enrollment_year",
+            flat=True
+        )
+        .distinct()
+        .order_by("-enrollment_year")
+    )
+
     return render(
         request,
         "students/student_list.html",
         {
             "students": students,
-            "query": query
+            "query": query,
+            "status": status,
+            "status_choices": StudyStatus.choices,
+            "gender": gender,
+            "gender_choices": Gender.choices,
+            "year": year,
+            "years": years,
+            "sort": sort,
+            "direction": direction,
         }
     )
 
