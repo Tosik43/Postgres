@@ -78,6 +78,11 @@ class Student(models.Model):
         auto_now=True
     )
 
+    is_active = models.BooleanField(
+        "Активен",
+        default=True
+    )
+
     class Meta:
         verbose_name = "Студент"
         verbose_name_plural = "Студенты"

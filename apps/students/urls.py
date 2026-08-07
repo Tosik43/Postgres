@@ -4,22 +4,29 @@ from . import views
 
 urlpatterns = [
 
-    path("", views.student_list, name="student_list"),
+    path("",
+        views.student_list, 
+        name="student_list"
+    ),
     path(
-    "<int:pk>/",
-    views.student_detail,
-    name="student_detail",
-),
+        "<int:pk>/",
+        views.student_detail,
+        name="student_detail",
+    ),
     path(
-    "<int:pk>/edit/",
-    views.student_edit,
-    name="student_edit",
-),
+        "<int:pk>/edit/",
+        views.student_edit,
+        name="student_edit",
+    ),
     path(
-    "add/", 
-    views.student_create, 
-    name="student_create"
-),
-
+        "add/", 
+        views.student_create, 
+        name="student_create"
+    ),
+    path(
+        "<int:pk>/delete/",
+        views.student_delete,
+        name="student_delete",
+    ),
 ]
 

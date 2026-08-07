@@ -9,7 +9,7 @@ from django.contrib import messages
 def student_list(request):
 
     query = request.GET.get("q", "")
-    students = Student.objects.all()
+    students = Student.objects.filter(is_active=True)
 
     if query:
         students = students.filter(
@@ -106,3 +106,23 @@ def student_edit(request, pk):
             "student": student,
         }
     )
+
+def student_delete(request, pk):
+
+    student = get_object_or_404(
+        Student,
+        pk=pk,
+        is_active=True
+    )
+
+    if request.method == "POST":
+
+        student.is_active = False
+        student.save()
+
+        messages.success(
+            request,
+            f'Студент "{student.full_name}" успешно удален.'
+        )
+
+    return redirect("student_list")
