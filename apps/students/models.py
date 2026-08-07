@@ -2,6 +2,7 @@ from django.db import models
 from .validators import *
 from django.core.exceptions import ValidationError
 from datetime import date
+from django.utils import timezone
 
 
 class StudyStatus(models.TextChoices):
@@ -81,6 +82,12 @@ class Student(models.Model):
     is_active = models.BooleanField(
         "Активен",
         default=True
+    )
+
+    deleted_at = models.DateTimeField(
+        "Дата удаления",
+        null=True,
+        blank=True
     )
 
     class Meta:

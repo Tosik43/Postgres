@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from .forms import StudentForm
 from django.contrib import messages
+from django.utils import timezone
 
 def student_list(request):
 
@@ -118,6 +119,7 @@ def student_delete(request, pk):
     if request.method == "POST":
 
         student.is_active = False
+        student.deleted_at = timezone.now()
         student.save()
 
         messages.success(
@@ -126,3 +128,39 @@ def student_delete(request, pk):
         )
 
     return redirect("student_list")
+
+def student_archive(request):
+
+    students = Student.objects.filter(
+        is_active=False
+    ).order_by("-deleted_at")
+
+    return render(
+        request,
+        "students/student_archive.html",
+        {
+            "students": students
+        }
+    )
+
+def student_restore(request, pk):
+
+    if request.method != "POST":
+        return redirect("student_archive")
+
+    student = get_object_or_404(
+        Student,
+        pk=pk,
+        is_active=False
+    )
+
+    student.is_active = True
+    student.deleted_at = None
+    student.save()
+
+    messages.success(
+        request,
+        "Студент успешно восстановлен."
+    )
+
+    return redirect("student_archive")

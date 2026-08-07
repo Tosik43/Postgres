@@ -9,3 +9,41 @@ body {
 .table th {
     width: 230px;
 }
+
+.navbar-custom {
+    background: linear-gradient(90deg, #0d6efd, #2b7cff);
+}
+
+.navbar-custom .navbar-brand {
+    color: white;
+    font-weight: 600;
+}
+
+.navbar-custom .nav-link {
+    color: rgba(255,255,255,.85);
+}
+
+.navbar-custom .nav-link:hover {
+    color: white;
+}
+
+.navbar-custom .nav-link.active {
+    color: white;
+    font-weight: 600;
+}
+
+.navbar-custom {
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+.navbar-brand {
+    font-size: 1.3rem;
+}
+
+.nav-link {
+    transition: .2s;
+}
+
+.nav-link:hover {
+    opacity: .8;
+}

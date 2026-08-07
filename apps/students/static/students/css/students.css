@@ -36,9 +36,12 @@ body {
     white-space: nowrap;
 }
 
-.table td,
-.table th {
-    vertical-align: middle;
+.table td{
+    padding:14px;
+}
+
+.table th{
+    padding:14px;
 }
 
 .form-label {

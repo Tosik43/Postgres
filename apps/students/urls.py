@@ -28,5 +28,15 @@ urlpatterns = [
         views.student_delete,
         name="student_delete",
     ),
+    path(
+        "archive/",
+        views.student_archive,
+        name="student_archive",
+    ),
+    path(
+        "<int:pk>/restore/",
+        views.student_restore,
+        name="student_restore",
+    ),
 ]
 
