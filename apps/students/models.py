@@ -114,23 +114,29 @@ class Student(models.Model):
 
         # Проверка возраста
 
-        today = date.today()
-
-        age = (
-            today.year
-            - self.birth_date.year
-            - (
-                (today.month, today.day)
-                <
-                (self.birth_date.month, self.birth_date.day)
+        if self.birth_date:  
+            today = date.today()
+            age = (
+                today.year
+                - self.birth_date.year
+                - (
+                    (today.month, today.day)
+                    <
+                    (self.birth_date.month, self.birth_date.day)
+                )
             )
-        )
 
-        if age < 14:
+            if age < 14:
+                raise ValidationError({
+                    "birth_date":
+                    "Возраст студента не может быть меньше 14 лет."
+                })
+        else:
             raise ValidationError({
-                "birth_date":
-                "Возраст студента не может быть меньше 14 лет."
+                "birth_date": "Дата рождения обязательна для заполнения."
             })
+        
+        
 
         if (
             self.graduation_year
