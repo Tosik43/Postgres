@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}
+Справочники
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="mb-0">
+        Справочники
+    </h2>
+
+</div>
+
+<div class="row g-4">
+
+    <div class="col-md-4">
+
+        <div class="card h-100 shadow-sm">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Факультеты
+                </h5>
+
+                <p class="card-text text-muted">
+                    Справочник факультетов университета.
+                </p>
+
+                <a
+                    href="{% url 'faculty_list' %}"
+                    class="btn btn-primary">
+
+                    Открыть
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card h-100 shadow-sm">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Направления подготовки
+                </h5>
+
+                <p class="card-text text-muted">
+                    Направления и специальности подготовки студентов.
+                </p>
+
+                <a
+                    href="#"
+                    class="btn btn-secondary">
+
+                    Скоро
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card h-100 shadow-sm">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Образовательные программы
+                </h5>
+
+                <p class="card-text text-muted">
+                    Образовательные программы университета.
+                </p>
+
+                <a
+                    href="#"
+                    class="btn btn-secondary">
+
+                    Скоро
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card h-100 shadow-sm">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Учебные группы
+                </h5>
+
+                <p class="card-text text-muted">
+                    Справочник учебных групп.
+                </p>
+
+                <a
+                    href="#"
+                    class="btn btn-secondary">
+
+                    Скоро
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

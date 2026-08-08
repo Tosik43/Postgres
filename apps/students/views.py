@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import render
-from .models import Student, StudyStatus, Gender
+from .models import Student, StudyStatus, Gender, Faculty
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from .forms import StudentForm
@@ -13,8 +13,13 @@ def student_list(request):
     status = request.GET.get("status", "")
     gender = request.GET.get("gender", "")
     year = request.GET.get("year", "")
-    sort = request.GET.get("sort", "full_name")
+    sort = request.GET.get("sort", "")
     direction = request.GET.get("direction", "asc")
+
+    query_params = request.GET.copy()
+
+    query_params.pop("sort", None)
+    query_params.pop("direction", None)
 
     students = Student.objects.filter(
         is_active=True
@@ -48,12 +53,13 @@ def student_list(request):
         "enrollment_year": "enrollment_year",
     }
 
-    sort_field = allowed_sort_fields.get(sort, "full_name")
+    sort_field = allowed_sort_fields.get(sort)
 
-    if direction == "desc":
-        students = students.order_by(f"-{sort_field}")
-    else:
-        students = students.order_by(sort_field)
+    if sort_field:
+        if direction == "desc":
+            students = students.order_by(f"-{sort_field}")
+        else:
+            students = students.order_by(sort_field)
 
     years = (
         Student.objects
@@ -80,6 +86,7 @@ def student_list(request):
             "years": years,
             "sort": sort,
             "direction": direction,
+            
         }
     )
 
@@ -220,3 +227,24 @@ def student_restore(request, pk):
     )
 
     return redirect("student_archive")
+
+def reference_list(request):
+
+    return render(
+        request,
+        "students/reference_list.html"
+    )
+
+def faculty_list(request):
+
+    faculties = Faculty.objects.filter(
+        is_active=True
+    )
+
+    return render(
+        request,
+        "students/faculty_list.html",
+        {
+            "faculties": faculties,
+        }
+    )

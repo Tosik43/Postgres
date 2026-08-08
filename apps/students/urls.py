@@ -38,5 +38,15 @@ urlpatterns = [
         views.student_restore,
         name="student_restore",
     ),
+    path(
+        "references/",
+        views.reference_list,
+        name="reference_list",
+    ),
+    path(
+        "faculties/",
+        views.faculty_list,
+        name="faculty_list",
+    ),
 ]
 

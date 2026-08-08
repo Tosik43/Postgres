@@ -16,6 +16,41 @@ class Gender(models.TextChoices):
     MALE = "M", "Мужской"
     FEMALE = "F", "Женский"
 
+class Faculty(models.Model):
+
+    name = models.CharField(
+        "Название",
+        max_length=255,
+        unique=True
+    )
+
+    is_active = models.BooleanField(
+        "Активен",
+        default=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    deleted_at = models.DateTimeField(
+        "Дата удаления",
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = "Факультет"
+        verbose_name_plural = "Факультеты"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
 
 class Student(models.Model):
 
