@@ -277,3 +277,65 @@ def faculty_create(request):
             "form": form,
         }
     )
+
+def faculty_edit(request, pk):
+
+    faculty = get_object_or_404(
+        Faculty,
+        pk=pk,
+        is_active=True
+    )
+
+    if request.method == "POST":
+
+        form = FacultyForm(
+            request.POST,
+            instance=faculty
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Данные факультета успешно сохранены."
+            )
+
+            return redirect("faculty_list")
+
+    else:
+
+        form = FacultyForm(
+            instance=faculty
+        )
+
+    return render(
+        request,
+        "students/faculty_form.html",
+        {
+            "form": form,
+            "faculty": faculty,
+        }
+    )
+
+def faculty_delete(request, pk):
+
+    faculty = get_object_or_404(
+        Faculty,
+        pk=pk,
+        is_active=True
+    )
+
+    if request.method == "POST":
+
+        faculty.is_active = False
+        faculty.deleted_at = timezone.now()
+        faculty.save()
+
+        messages.success(
+            request,
+            f'Факультет "{faculty.abbreviation}" успешно удален.'
+        )
+
+    return redirect("faculty_list")

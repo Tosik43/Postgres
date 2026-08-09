@@ -1,107 +1,151 @@
 {% extends "base.html" %}
 
 {% block title %}
-Добавление факультета
+
+    {% if faculty %}
+        Редактирование факультета
+    {% else %}
+        Добавление факультета
+    {% endif %}
+
 {% endblock %}
 
 {% block content %}
 
 <div class="row justify-content-center">
 
-    <div class="col-md-6">
+        <div class="col-md-6">
+            <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">
 
-            <h2 class="mb-0">
-                Добавление факультета
-            </h2>
+                    {% if faculty %}
+                        Редактирование факультета
+                    {% else %}
+                        Добавление факультета
+                    {% endif %}
 
-            <a
-                href="{% url 'faculty_list' %}"
-                class="btn btn-secondary">
+                </h2>
 
-                Назад
-
-            </a>
-
-        </div>
+            </div>
 
 
-        <div class="card shadow-sm">
+            <div class="card shadow-sm">
 
-            <div class="card-body">
+                <div class="card-body">
 
-                <form method="post">
+                    {% if form.non_field_errors %}
 
-                    {% csrf_token %}
+                        <div class="alert alert-danger">
 
-                    <div class="mb-3">
+                            {% for error in form.non_field_errors %}
 
-                        <label
-                            for="{{ form.name.id_for_label }}"
-                            class="form-label">
+                                {{ error }}
 
-                            Полное название
+                            {% endfor %}
 
-                        </label>
+                        </div>
 
-                        {{ form.name }}
-
-                        {% if form.name.errors %}
-
-                            <div class="text-danger mt-1">
-                                {{ form.name.errors }}
-                            </div>
-
-                        {% endif %}
-
-                    </div>
+                    {% endif %}
 
 
-                    <div class="mb-3">
+                    <form method="post">
 
-                        <label
-                            for="{{ form.abbreviation.id_for_label }}"
-                            class="form-label">
-
-                            Аббревиатура
-
-                        </label>
-
-                        {{ form.abbreviation }}
-
-                        {% if form.abbreviation.errors %}
-
-                            <div class="text-danger mt-1">
-                                {{ form.abbreviation.errors }}
-                            </div>
-
-                        {% endif %}
-
-                    </div>
+                        {% csrf_token %}
 
 
-                    <div class="d-flex gap-2">
+                        <div class="mb-3">
 
-                        <button
-                            type="submit"
-                            class="btn btn-success">
+                            <label
+                                for="{{ form.name.id_for_label }}"
+                                class="form-label">
 
-                            Добавить
+                                Полное название
 
-                        </button>
+                            </label>
 
-                        <a
-                            href="{% url 'faculty_list' %}"
-                            class="btn btn-secondary">
+                            {{ form.name }}
 
-                            Отмена
+                            {% if form.name.errors %}
 
-                        </a>
+                                <div class="text-danger mt-1">
 
-                    </div>
+                                    {{ form.name.errors.0 }}
 
-                </form>
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label
+                                for="{{ form.abbreviation.id_for_label }}"
+                                class="form-label">
+
+                                Аббревиатура
+
+                            </label>
+
+                            {{ form.abbreviation }}
+
+                            {% if form.abbreviation.errors %}
+
+                                <div class="text-danger mt-1">
+
+                                    {{ form.abbreviation.errors.0 }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success">
+
+                                {% if faculty %}
+                                    Сохранить
+                                {% else %}
+                                    Добавить
+                                {% endif %}
+
+                            </button>
+
+
+                            {% if faculty %}
+
+                                <a
+                                    href="{% url 'faculty_list' %}"
+                                    class="btn btn-secondary">
+
+                                    Отмена
+
+                                </a>
+
+                            {% else %}
+
+                                <a
+                                    href="{% url 'faculty_list' %}"
+                                    class="btn btn-secondary">
+
+                                    Отмена
+
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </form>
+
+                </div>
 
             </div>
 

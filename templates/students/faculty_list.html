@@ -62,12 +62,21 @@
                 <td>
 
                     <a
-                        href="#"
-                        class="btn btn-warning btn-sm">
-
+                        href="{% url 'faculty_edit' faculty.id %}" class="btn btn-warning btn-sm">
                         Изменить
-
                     </a>
+
+                    <button
+                        class="btn btn-danger btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteFacultyModal"
+                        data-id="{{ faculty.id }}"
+                        data-name="{{ faculty.name }}"
+                        data-url="{% url 'faculty_delete' faculty.id %}">
+
+                        Удалить
+
+                    </button>
 
                 </td>
 
@@ -92,5 +101,78 @@
     </tbody>
 
 </table>
+
+<div
+    class="modal fade"
+    id="deleteFacultyModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+
+                <h5 class="modal-title">
+                    Удаление факультета
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                Вы действительно хотите удалить факультет
+                <strong id="facultyName"></strong>?
+
+                <br><br>
+
+                <small class="text-danger">
+                    Факультет не удаляется из базы данных.
+                    Он просто перестанет отображаться в списке.
+                </small>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Отмена
+
+                </button>
+
+                <form
+                    id="deleteFacultyForm"
+                    method="post">
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger">
+
+                        Удалить
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

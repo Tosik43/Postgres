@@ -53,5 +53,15 @@ urlpatterns = [
         views.faculty_create,
         name="faculty_create",
     ),
+    path(
+        "faculties/<int:pk>/edit/",
+        views.faculty_edit,
+        name="faculty_edit"
+    ),
+    path(
+        "faculties/<int:pk>/delete/",
+        views.faculty_delete,
+        name="faculty_delete"
+    ),
 ]
 
