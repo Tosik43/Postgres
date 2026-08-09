@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render
-from .models import Student, StudyStatus, Gender, Faculty
+from .models import Student, StudyStatus, Gender
+from apps.directories.models import Faculty
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from .forms import StudentForm, FacultyForm

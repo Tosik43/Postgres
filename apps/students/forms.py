@@ -1,6 +1,8 @@
 from django import forms
 
-from .models import Student, Faculty, EducationalProgram
+from .models import Student
+from apps.directories.models import Faculty
+from apps.directories.models import EducationalProgram
 
 
 class StudentForm(forms.ModelForm):
