@@ -39,8 +39,7 @@
                 Архив
             </a>
 
-            <a
-                class="nav-link" href="{% url 'reference_list' %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'reference_list' %}active{% endif %}"  href="{% url 'reference_list' %}">
                 Справочники
             </a>
 

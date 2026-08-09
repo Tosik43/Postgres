@@ -13,7 +13,7 @@
     </h2>
 
     <a
-        href="#"
+        href="{% url 'faculty_create' %}"
         class="btn btn-success">
 
         + Добавить факультет
@@ -25,15 +25,19 @@
 
 <table class="table table-bordered table-hover align-middle">
 
-    <thead class="table-primary">
+    <thead class="table-primary text-center">
 
         <tr>
 
             <th>
-                Название
+                Полное название
             </th>
 
-            <th width="180">
+            <th>
+                Аббревиатура
+            </th>
+
+            <th>
                 Действия
             </th>
 
@@ -43,43 +47,47 @@
 
     <tbody>
 
-    {% for faculty in faculties %}
+        {% for faculty in faculties %}
 
-        <tr>
+            <tr>
 
-            <td>
-                {{ faculty.name }}
-            </td>
+                <td>
+                    {{ faculty.name }}
+                </td>
 
-            <td>
+                <td>
+                    {{ faculty.abbreviation }}
+                </td>
 
-                <a
-                    href="#"
-                    class="btn btn-warning btn-sm">
+                <td>
 
-                    Изменить
+                    <a
+                        href="#"
+                        class="btn btn-warning btn-sm">
 
-                </a>
+                        Изменить
 
-            </td>
+                    </a>
 
-        </tr>
+                </td>
 
-    {% empty %}
+            </tr>
 
-        <tr>
+        {% empty %}
 
-            <td
-                colspan="2"
-                class="text-center">
+            <tr>
 
-                Факультетов пока нет
+                <td
+                    colspan="3"
+                    class="text-center">
 
-            </td>
+                    Факультетов пока нет
 
-        </tr>
+                </td>
 
-    {% endfor %}
+            </tr>
+
+        {% endfor %}
 
     </tbody>
 

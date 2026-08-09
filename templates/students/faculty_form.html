@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}
+Добавление факультета
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-6">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h2 class="mb-0">
+                Добавление факультета
+            </h2>
+
+            <a
+                href="{% url 'faculty_list' %}"
+                class="btn btn-secondary">
+
+                Назад
+
+            </a>
+
+        </div>
+
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+
+                        <label
+                            for="{{ form.name.id_for_label }}"
+                            class="form-label">
+
+                            Полное название
+
+                        </label>
+
+                        {{ form.name }}
+
+                        {% if form.name.errors %}
+
+                            <div class="text-danger mt-1">
+                                {{ form.name.errors }}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label
+                            for="{{ form.abbreviation.id_for_label }}"
+                            class="form-label">
+
+                            Аббревиатура
+
+                        </label>
+
+                        {{ form.abbreviation }}
+
+                        {% if form.abbreviation.errors %}
+
+                            <div class="text-danger mt-1">
+                                {{ form.abbreviation.errors }}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="d-flex gap-2">
+
+                        <button
+                            type="submit"
+                            class="btn btn-success">
+
+                            Добавить
+
+                        </button>
+
+                        <a
+                            href="{% url 'faculty_list' %}"
+                            class="btn btn-secondary">
+
+                            Отмена
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

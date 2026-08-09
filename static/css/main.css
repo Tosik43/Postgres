@@ -2,11 +2,6 @@ body {
     background-color: #f8f9fa;
 }
 
-.actions-column {
-    width: 140px;
-    white-space: nowrap;
-}
-
 .card {
     border-radius: 12px;
 }

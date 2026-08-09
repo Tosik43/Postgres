@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Student
+from .models import Student, Faculty
 
 
 class StudentForm(forms.ModelForm):
@@ -60,3 +60,31 @@ class StudentForm(forms.ModelForm):
                 field.widget.attrs["class"] = f"{css_class} is-invalid"
             else:
                 field.widget.attrs["class"] = css_class
+
+class FacultyForm(forms.ModelForm):
+
+    class Meta:
+        model = Faculty
+
+        fields = [
+            "name",
+            "abbreviation",
+        ]
+
+        widgets = {
+
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Введите полное название факультета",
+                }
+            ),
+
+            "abbreviation": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Например, ВШЭКН",
+                }
+            ),
+
+        }

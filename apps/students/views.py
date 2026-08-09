@@ -3,7 +3,7 @@ from django.shortcuts import render
 from .models import Student, StudyStatus, Gender, Faculty
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
-from .forms import StudentForm
+from .forms import StudentForm, FacultyForm
 from django.contrib import messages
 from django.utils import timezone
 
@@ -246,5 +246,34 @@ def faculty_list(request):
         "students/faculty_list.html",
         {
             "faculties": faculties,
+        }
+    )
+
+def faculty_create(request):
+
+    if request.method == "POST":
+
+        form = FacultyForm(request.POST)
+
+        if form.is_valid():
+
+            faculty = form.save()
+
+            messages.success(
+                request,
+                f'Факультет "{faculty.name}" успешно добавлен.'
+            )
+
+            return redirect("faculty_list")
+
+    else:
+
+        form = FacultyForm()
+
+    return render(
+        request,
+        "students/faculty_form.html",
+        {
+            "form": form,
         }
     )

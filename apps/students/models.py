@@ -19,8 +19,14 @@ class Gender(models.TextChoices):
 class Faculty(models.Model):
 
     name = models.CharField(
-        "Название",
+        "Полное название",
         max_length=255,
+        unique=True
+    )
+
+    abbreviation = models.CharField(
+        "Аббревиатура",
+        max_length=30,
         unique=True
     )
 
@@ -49,7 +55,7 @@ class Faculty(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return self.name
+        return f"{self.abbreviation} — {self.name}"
 
 
 class Student(models.Model):
