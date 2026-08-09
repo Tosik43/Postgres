@@ -31,15 +31,25 @@
 
         <div class="navbar-nav ms-auto">
 
-            <a class="nav-link {% if request.resolver_match.url_name == 'student_list' %}active{% endif %}" href="{% url 'student_list' %}">
+            <a
+                class="nav-link
+                {% if request.resolver_match.url_name in 'student_list student_detail student_create student_edit student_delete student_archive student_restore student_delete_forever' %}
+                    active
+                {% endif %}"
+                href="{% url 'student_list' %}">
+
                 Студенты
+
             </a>
 
-            <a class="nav-link {% if request.resolver_match.url_name == 'student_archive' %}active{% endif %}" href="{% url 'student_archive' %}">
+            <!-- <a class="nav-link {% if request.resolver_match.url_name == 'student_archive' %}active{% endif %}" href="{% url 'student_archive' %}">
                 Архив
-            </a>
+            </a> -->
 
-            <a class="nav-link {% if request.resolver_match.url_name == 'reference_list' %}active{% endif %}"  href="{% url 'reference_list' %}">
+            <a class="nav-link {% if request.resolver_match.url_name in 'reference_list faculty_list faculty_create faculty_edit faculty_delete faculty_archive faculty_restore faculty_delete_forever' %}
+                    active
+                {% endif %}"
+                href="{% url 'reference_list' %}">
                 Справочники
             </a>
 

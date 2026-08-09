@@ -2,6 +2,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("Application loaded");
 
+    const studentForeverModal =
+        document.getElementById("deleteStudentForeverModal");
+
+    if (studentForeverModal) {
+
+        studentForeverModal.addEventListener(
+            "show.bs.modal",
+            function (event) {
+
+                const button = event.relatedTarget;
+
+                document.getElementById(
+                    "studentForeverName"
+                ).textContent = button.dataset.name;
+
+                document.getElementById(
+                    "deleteStudentForeverForm"
+                ).action = button.dataset.url;
+
+            }
+        );
+
+    }
+
 
     const facultyModal =
         document.getElementById("deleteFacultyModal");
@@ -18,6 +42,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 button.dataset.url;
 
         });
+    }
+
+    const facultyForeverModal =
+        document.getElementById("deleteFacultyForeverModal");
+
+        if (facultyForeverModal) {
+
+            facultyForeverModal.addEventListener(
+                "show.bs.modal",
+                function (event) {
+
+                    const button = event.relatedTarget;
+
+                    document.getElementById(
+                        "facultyForeverName"
+                    ).textContent = button.dataset.name;
+
+                    document.getElementById(
+                        "deleteFacultyForeverForm"
+                    ).action = button.dataset.url;
+
+                }
+            );
+
     }
 
 });

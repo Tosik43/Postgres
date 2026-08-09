@@ -12,13 +12,25 @@
         Факультеты
     </h2>
 
-    <a
-        href="{% url 'faculty_create' %}"
-        class="btn btn-success">
+    <div class="d-flex gap-2">
 
-        + Добавить факультет
+        <a
+            href="{% url 'faculty_create' %}"
+            class="btn btn-success">
 
-    </a>
+            + Добавить факультет
+
+        </a>
+
+        <a
+            href="{% url 'faculty_archive' %}"
+            class="btn btn-outline-primary">
+
+            Архив
+
+        </a>
+
+    </div>
 
 </div>
 

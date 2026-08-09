@@ -228,6 +228,28 @@ def student_restore(request, pk):
 
     return redirect("student_archive")
 
+def student_delete_forever(request, pk):
+
+    if request.method != "POST":
+        return redirect("student_archive")
+
+    student = get_object_or_404(
+        Student,
+        pk=pk,
+        is_active=False
+    )
+
+    name = student.full_name
+
+    student.delete()
+
+    messages.success(
+        request,
+        f'Студент "{name}" окончательно удален из базы данных.'
+    )
+
+    return redirect("student_archive")
+
 def reference_list(request):
 
     return render(
@@ -339,3 +361,62 @@ def faculty_delete(request, pk):
         )
 
     return redirect("faculty_list")
+
+def faculty_archive(request):
+
+    faculties = Faculty.objects.filter(
+        is_active=False
+    ).order_by("-deleted_at")
+
+    return render(
+        request,
+        "students/faculty_archive.html",
+        {
+            "faculties": faculties
+        }
+    )
+
+
+def faculty_restore(request, pk):
+
+    if request.method != "POST":
+        return redirect("faculty_archive")
+
+    faculty = get_object_or_404(
+        Faculty,
+        pk=pk,
+        is_active=False
+    )
+
+    faculty.is_active = True
+    faculty.deleted_at = None
+    faculty.save()
+
+    messages.success(
+        request,
+        "Факультет успешно восстановлен."
+    )
+
+    return redirect("faculty_archive")
+
+def faculty_delete_forever(request, pk):
+
+    if request.method != "POST":
+        return redirect("faculty_archive")
+
+    faculty = get_object_or_404(
+        Faculty,
+        pk=pk,
+        is_active=False
+    )
+
+    name = faculty.abbreviation
+
+    faculty.delete()
+
+    messages.success(
+        request,
+        f'Факультет "{name}" окончательно удален из базы данных.'
+    )
+
+    return redirect("faculty_archive")
