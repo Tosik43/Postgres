@@ -1,48 +1,83 @@
 from django.urls import path
 
-from . import views
+from .views import faculties, educational_programs, references
 
 urlpatterns = [
 
     path(
         "references/",
-        views.reference_list,
+        references.reference_list,
         name="reference_list",
     ),
     path(
         "faculties/",
-        views.faculty_list,
+        faculties.faculty_list,
         name="faculty_list",
     ),
     path(
         "faculties/add/",
-        views.faculty_create,
+        faculties.faculty_create,
         name="faculty_create",
     ),
     path(
         "faculties/<int:pk>/edit/",
-        views.faculty_edit,
+        faculties.faculty_edit,
         name="faculty_edit"
     ),
     path(
         "faculties/<int:pk>/delete/",
-        views.faculty_delete,
+        faculties.faculty_delete,
         name="faculty_delete"
     ),
     path(
         "faculties/archive/",
-        views.faculty_archive,
+        faculties.faculty_archive,
         name="faculty_archive"
     ),
 
     path(
         "faculties/<int:pk>/restore/",
-        views.faculty_restore,
+        faculties.faculty_restore,
         name="faculty_restore"
     ),
     path(
         "faculties/<int:pk>/delete-forever/",
-        views.faculty_delete_forever,
+        faculties.faculty_delete_forever,
         name="faculty_delete_forever"
+    ),
+    path(
+        "educational-programs/",
+        educational_programs.educational_program_list,
+        name="educational_program_list",
+    ),
+    path(
+        "educational-programs/add/",
+        educational_programs.educational_program_create,
+        name="educational_program_create",
+    ),
+    path(
+        "educational-programs/<int:pk>/edit/",
+        educational_programs.educational_program_edit,
+        name="educational_program_edit",
+    ),
+    path(
+        "educational-programs/<int:pk>/delete/",
+        educational_programs.educational_program_delete,
+        name="educational_program_delete",
+    ),
+    path(
+        "educational-programs/archive/",
+        educational_programs.educational_program_archive,
+        name="educational_program_archive",
+    ),
+    path(
+        "educational-programs/<int:pk>/restore/",
+        educational_programs.educational_program_restore,
+        name="educational_program_restore",
+    ),
+    path(
+        "educational-programs/<int:pk>/delete-forever/",
+        educational_programs.educational_program_delete_forever,
+        name="educational_program_delete_forever",
     ),
 ]
