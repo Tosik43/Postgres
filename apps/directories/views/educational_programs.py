@@ -81,7 +81,7 @@ def educational_program_create(request):
 
     return render(
         request,
-        "directories/educational_program_form.html",
+        "directories/educational_programs/form.html",
         {
             "form": form,
             "program": None,
@@ -118,7 +118,7 @@ def educational_program_edit(request, pk):
 
     return render(
         request,
-        "directories/educational_program_form.html",
+        "directories/educational_programs/form.html",
         {
             "form": form,
             "program": program,
@@ -154,7 +154,7 @@ def educational_program_archive(request):
 
     return render(
         request,
-        "directories/educational_program_archive.html",
+        "directories/educational_programs/archive.html",
         {
             "programs": programs,
         }

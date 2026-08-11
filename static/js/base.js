@@ -26,45 +26,103 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
     const facultyModal =
         document.getElementById("deleteFacultyModal");
 
     if (facultyModal) {
-        facultyModal.addEventListener("show.bs.modal", function (event) {
 
-            const button = event.relatedTarget;
+        facultyModal.addEventListener(
+            "show.bs.modal",
+            function (event) {
 
-            document.getElementById("facultyName").textContent =
-                button.dataset.name;
+                const button = event.relatedTarget;
 
-            document.getElementById("deleteFacultyForm").action =
-                button.dataset.url;
+                document.getElementById(
+                    "facultyName"
+                ).textContent = button.dataset.name;
 
-        });
+                document.getElementById(
+                    "deleteFacultyForm"
+                ).action = button.dataset.url;
+
+            }
+        );
+
     }
 
     const facultyForeverModal =
         document.getElementById("deleteFacultyForeverModal");
 
-        if (facultyForeverModal) {
+    if (facultyForeverModal) {
 
-            facultyForeverModal.addEventListener(
-                "show.bs.modal",
-                function (event) {
+        facultyForeverModal.addEventListener(
+            "show.bs.modal",
+            function (event) {
 
-                    const button = event.relatedTarget;
+                const button = event.relatedTarget;
 
-                    document.getElementById(
-                        "facultyForeverName"
-                    ).textContent = button.dataset.name;
+                document.getElementById(
+                    "facultyForeverName"
+                ).textContent = button.dataset.name;
 
-                    document.getElementById(
-                        "deleteFacultyForeverForm"
-                    ).action = button.dataset.url;
+                document.getElementById(
+                    "deleteFacultyForeverForm"
+                ).action = button.dataset.url;
 
-                }
-            );
+            }
+        );
+
+    }
+
+    const educationalProgramModal =
+        document.getElementById(
+            "deleteEducationalProgramModal"
+        );
+
+    if (educationalProgramModal) {
+
+        educationalProgramModal.addEventListener(
+            "show.bs.modal",
+            function (event) {
+
+                const button = event.relatedTarget;
+
+                document.getElementById(
+                    "educationalProgramName"
+                ).textContent = button.dataset.name;
+
+                document.getElementById(
+                    "deleteEducationalProgramForm"
+                ).action = button.dataset.url;
+
+            }
+        );
+
+    }
+
+    const educationalProgramForeverModal =
+        document.getElementById(
+            "deleteEducationalProgramForeverModal"
+        );
+
+        if (educationalProgramForeverModal) {
+
+        educationalProgramForeverModal.addEventListener(
+            "show.bs.modal",
+            function (event) {
+
+                const button = event.relatedTarget;
+
+                document.getElementById(
+                    "deleteEducationalProgramForeverName"
+                ).textContent = button.dataset.name;
+
+                document.getElementById(
+                    "deleteEducationalProgramForeverForm"
+                ).action = button.dataset.url;
+
+            }
+        );
 
     }
 

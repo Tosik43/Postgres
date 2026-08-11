@@ -46,7 +46,7 @@
                 Архив
             </a> -->
 
-            <a class="nav-link {% if request.resolver_match.url_name in 'reference_list faculty_list faculty_create faculty_edit faculty_delete faculty_archive faculty_restore faculty_delete_forever' %}
+            <a class="nav-link {% if request.resolver_match.url_name in 'reference_list faculty_list faculty_create faculty_edit faculty_delete faculty_archive faculty_restore faculty_delete_forever educational_program_list educational_program_create educational_program_edit educational_program_delete educational_program_archive educational_program_restore educational_program_delete_forever' %}
                     active
                 {% endif %}"
                 href="{% url 'reference_list' %}">
