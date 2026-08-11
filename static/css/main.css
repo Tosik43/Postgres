@@ -6,8 +6,46 @@ body {
     border-radius: 12px;
 }
 
-.table th {
-    width: 230px;
+.educational-program-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.educational-program-table .program-code-column {
+    width: 15%;
+}
+
+.educational-program-table .program-name-column {
+    width: 40%;
+}
+
+.educational-program-table .program-level-column {
+    width: 25%;
+}
+
+.educational-program-table .program-actions-column {
+    width: 20%;
+    min-width: 130px;
+}
+
+.educational-program-table th,
+.educational-program-table td {
+    vertical-align: middle;
+    overflow-wrap: break-word;
+}
+
+.educational-program-table td:first-child {
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.educational-program-table td:nth-child(2) {
+    overflow-wrap: anywhere;
+}
+
+.educational-program-table .actions-column {
+    white-space: nowrap;
+    text-align: left;
 }
 
 .navbar-custom {

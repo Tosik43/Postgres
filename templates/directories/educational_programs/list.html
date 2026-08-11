@@ -106,135 +106,151 @@
 
 </form>
 
+<div class="table-responsive">
 
-<table class="table table-bordered table-hover align-middle">
+    <table class="table table-bordered table-hover align-middle educational-program-table">
 
-    <thead class="table-primary text-center">
-        <tr>
+        <colgroup>
+            <col class="program-code-column">
+            <col class="program-name-column">
+            <col class="program-level-column">
+            <col class="program-actions-column">
+        </colgroup>
 
-            <th>
-                <a 
-                    class="text-decoration-none text-dark"
-                    href="?{{ query_params }}&sort=code&direction={% if sort == 'code' and direction == 'asc' %}desc{% else %}asc{% endif %}">
-                    Код
-                    {% if sort == "code" %}
-                        {% if direction == "asc" %}
-                            ▲
-                        {% else %}
-                            ▼
-                        {% endif %}
-                    {% else %}
-                    ↕
-                    {% endif %}
-                </a>
-            </th>
-
-
-            <th>
-                <a 
-                    class="text-decoration-none text-dark"
-                    href="?{{ query_params }}&sort=name&direction={% if sort == 'name' and direction == 'asc' %}desc{% else %}asc{% endif %}">
-                    Название
-                    {% if sort == "name" %}
-                        {% if direction == "asc" %}
-                            ▲
-                        {% else %}
-                            ▼
-                        {% endif %}
-                    {% else %}
-                    ↕
-                    {% endif %}
-                </a>
-            </th>
-
-
-            <th>
-                <a 
-                    class="text-decoration-none text-dark"
-                    href="?{{ query_params }}&sort=education_level&direction={% if sort == 'education_level' and direction == 'asc' %}desc{% else %}asc{% endif %}">
-                    Уровень образования
-                    {% if sort == "education_level" %}
-                        {% if direction == "asc" %}
-                            ▲
-                        {% else %}
-                            ▼
-                        {% endif %}
-                    {% else %}
-                    ↕
-                    {% endif %}
-                </a>
-            </th>
-
-
-            <th class="actions-column">
-                Действия
-            </th>
-
-        </tr>
-    </thead>
-
-
-    <tbody>
-
-        {% for program in programs %}
-
+        <thead class="table-primary text-center">
+            
             <tr>
 
-                <td>
-                    <strong>
-                        {{ program.code }}
-                    </strong>
-                </td>
-
-
-                <td>
-                    {{ program.name }}
-                </td>
-
-
-                <td>
-                    {{ program.get_education_level_display }}
-                </td>
-
-
-                <td>
-
-                    <a
-                        href="{% url 'educational_program_edit' program.pk %}" class="btn btn-warning btn-sm">
-                        Изменить
+                <th>
+                    <a 
+                        class="text-decoration-none text-dark"
+                        href="?{{ query_params }}&sort=code&direction={% if sort == 'code' and direction == 'asc' %}desc{% else %}asc{% endif %}">
+                        Код
+                        {% if sort == "code" %}
+                            {% if direction == "asc" %}
+                                ▲
+                            {% else %}
+                                ▼
+                            {% endif %}
+                        {% else %}
+                        ↕
+                        {% endif %}
                     </a>
+                </th>
 
-                    <button
-                        class="btn btn-danger btn-sm"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteEducationalProgramModal"
-                        data-id="{{ program.id }}"
-                        data-name="{{ program.code }} — {{ program.name }}"
-                        data-url="{% url 'educational_program_delete' program.id %}"
-                    >
-                        Удалить
-                    </button>
 
-                </td>
+                <th>
+                    <a 
+                        class="text-decoration-none text-dark"
+                        href="?{{ query_params }}&sort=name&direction={% if sort == 'name' and direction == 'asc' %}desc{% else %}asc{% endif %}">
+                        Название
+                        {% if sort == "name" %}
+                            {% if direction == "asc" %}
+                                ▲
+                            {% else %}
+                                ▼
+                            {% endif %}
+                        {% else %}
+                        ↕
+                        {% endif %}
+                    </a>
+                </th>
+
+
+                <th>
+                    <a 
+                        class="text-decoration-none text-dark"
+                        href="?{{ query_params }}&sort=education_level&direction={% if sort == 'education_level' and direction == 'asc' %}desc{% else %}asc{% endif %}">
+                        Уровень образования
+                        {% if sort == "education_level" %}
+                            {% if direction == "asc" %}
+                                ▲
+                            {% else %}
+                                ▼
+                            {% endif %}
+                        {% else %}
+                        ↕
+                        {% endif %}
+                    </a>
+                </th>
+
+
+                <th class="program-actions-column">
+                    Действия
+                </th>
 
             </tr>
+            
+        </thead>
 
-        {% empty %}
 
-            <tr>
+        <tbody>
 
-                <td colspan="5" class="text-center">
-                    Образовательные программы не найдены.
-                </td>
+            {% for program in programs %}
 
-            </tr>
+                <tr>
 
-        {% endfor %}
+                    <td>
+                        <strong>
+                            {{ program.code }}
+                        </strong>
+                    </td>
 
-    </tbody>
 
-</table>
-    
+                    <td>
+                        {{ program.name }}
+                    </td>
+
+
+                    <td>
+                        {{ program.get_education_level_display }}
+                    </td>
+
+
+                    <td class="actions-column">
+
+                        <div class="d-flex flex-wrap justify-content-center gap-1">
+
+                            <a
+                                href="{% url 'educational_program_edit' program.pk %}" class="btn btn-warning btn-sm">
+                                Изменить
+                            </a>
+
+                            <button
+                                class="btn btn-danger btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteEducationalProgramModal"
+                                data-id="{{ program.id }}"
+                                data-name="{{ program.code }} — {{ program.name }}"
+                                data-url="{% url 'educational_program_delete' program.id %}"
+                            >
+                                Удалить
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="4" class="text-center">
+                        Образовательные программы не найдены.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
 <div
     class="modal fade"
     id="deleteEducationalProgramModal"
