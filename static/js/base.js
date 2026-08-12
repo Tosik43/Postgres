@@ -2,6 +2,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("Application loaded");
 
+    document.querySelectorAll('.auto-submit').forEach(function(select) {
+        select.addEventListener('change', function() {
+            const form = this.closest('form');
+            if (form) {
+                form.submit();
+            }
+        });
+    });
+
     const studentForeverModal =
         document.getElementById("deleteStudentForeverModal");
 

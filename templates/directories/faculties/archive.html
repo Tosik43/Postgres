@@ -7,205 +7,82 @@
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-
-    <h2 class="mb-0">
-        Архив факультетов
-    </h2>
-
-    <a
-        href="{% url 'faculty_list' %}"
-        class="btn btn-secondary">
-
-        Назад
-
+    <h2 class="mb-0">Архив факультетов</h2>
+    <a href="{% url 'faculty_list' %}" class="btn btn-secondary text-nowrap">
+        ← Назад
     </a>
-
 </div>
-
 
 <div class="table-responsive">
-
     <table class="table table-bordered table-hover align-middle">
-
         <thead class="table-primary text-center">
-
             <tr>
-
-                <th>
-                    Полное название
-                </th>
-
-                <th>
-                    Аббревиатура
-                </th>
-
-                <th>
-                    Дата удаления
-                </th>
-
-                <th>
-                    Действия
-                </th>
-
+                <th style="width: 35%;">Полное название</th>
+                <th style="width: 20%;">Аббревиатура</th>
+                <th style="width: 20%;">Дата удаления</th>
+                <th style="width: 25%; min-width: 200px;">Действия</th>
             </tr>
-
         </thead>
-
         <tbody>
-
             {% for faculty in faculties %}
-
                 <tr>
-
+                    <td>{{ faculty.name }}</td>
+                    <td>{{ faculty.abbreviation }}</td>
+                    <td>{{ faculty.deleted_at|date:"d.m.Y H:i" }}</td>
                     <td>
-                        {{ faculty.name }}
-                    </td>
-
-                    <td>
-                        {{ faculty.abbreviation }}
-                    </td>
-
-                    <td>
-                        {{ faculty.deleted_at|date:"d.m.Y H:i" }}
-                    </td>
-
-                    <td>
-
-                        <div class="d-flex gap-2">
-
-                            <form
-                                method="post"
-                                action="{% url 'faculty_restore' faculty.id %}">
-
+                        <div class="d-flex gap-2 justify-content-center">
+                            <form method="post" action="{% url 'faculty_restore' faculty.id %}" class="d-inline">
                                 {% csrf_token %}
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-success btn-sm">
-
+                                <button type="submit" class="btn btn-success btn-sm text-nowrap">
                                     Восстановить
-
                                 </button>
-
                             </form>
-
-
-                            <button
-                                type="button"
-                                class="btn btn-danger btn-sm"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deleteFacultyForeverModal"
-                                data-name="{{ faculty.name }}"
-                                data-url="{% url 'faculty_delete_forever' faculty.id %}">
-
+                            <button type="button"
+                                    class="btn btn-danger btn-sm text-nowrap"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteFacultyForeverModal"
+                                    data-name="{{ faculty.name }}"
+                                    data-url="{% url 'faculty_delete_forever' faculty.id %}">
                                 Удалить навсегда
-
                             </button>
-
                         </div>
-
                     </td>
-
                 </tr>
-
             {% empty %}
-
                 <tr>
-
-                    <td
-                        colspan="4"
-                        class="text-center">
-
-                        Архив факультетов пуст
-
-                    </td>
-
+                    <td colspan="4" class="text-center">Архив факультетов пуст</td>
                 </tr>
-
             {% endfor %}
-
         </tbody>
-
     </table>
-
 </div>
 
-<div
-    class="modal fade"
-    id="deleteFacultyForeverModal"
-    tabindex="-1">
-
+<!-- Модальное окно окончательного удаления -->
+<div class="modal fade" id="deleteFacultyForeverModal" tabindex="-1">
     <div class="modal-dialog">
-
         <div class="modal-content">
-
             <div class="modal-header bg-danger text-white">
-
-                <h5 class="modal-title">
-                    Окончательное удаление
-                </h5>
-
-                <button
-                    type="button"
-                    class="btn-close btn-close-white"
-                    data-bs-dismiss="modal">
-                </button>
-
+                <h5 class="modal-title">Окончательное удаление</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-
-
             <div class="modal-body">
-
                 Вы действительно хотите окончательно удалить факультет
-
                 <strong id="facultyForeverName"></strong>?
-
                 <br><br>
-
                 <small class="text-danger">
-
                     Внимание! Факультет будет полностью удалён
                     из базы данных. Восстановить его будет невозможно.
-
                 </small>
-
             </div>
-
-
             <div class="modal-footer">
-
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal">
-
-                    Отмена
-
-                </button>
-
-
-                <form
-                    id="deleteFacultyForeverForm"
-                    method="post">
-
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <form id="deleteFacultyForeverForm" method="post">
                     {% csrf_token %}
-
-                    <button
-                        type="submit"
-                        class="btn btn-danger">
-
-                        Удалить навсегда
-
-                    </button>
-
+                    <button type="submit" class="btn btn-danger">Удалить навсегда</button>
                 </form>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
 
 {% endblock %}
