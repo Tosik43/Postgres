@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from datetime import date
+import re
 
 
 class StudyForm(models.TextChoices):
@@ -15,6 +17,7 @@ class FundingType(models.TextChoices):
 
 class EducationHistoryStatus(models.TextChoices):
     STUDYING = "studying", "Обучается"
+    TRANSFERRED = "transferred", "Перевелся"
     ACADEMIC_LEAVE = "academic_leave", "Академический отпуск"
     EXPELLED = "expelled", "Отчислен"
     GRADUATED = "graduated", "Выпустился"
@@ -69,8 +72,9 @@ class EducationHistory(models.Model):
         verbose_name="Образовательная программа"
     )
 
-    enrollment_year = models.PositiveSmallIntegerField(
-        "Год обучения"
+    academic_year = models.CharField(
+        "Учебный год",
+        max_length=9
     )
 
     course = models.PositiveSmallIntegerField(
@@ -135,9 +139,21 @@ class EducationHistory(models.Model):
 
         ordering = [
             "student",
-            "start_date",
+            "academic_year",
             "course",
-            "semester"
+            "semester",
+        ]
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "student",
+                    "academic_year",
+                    "course",
+                    "semester",
+                ],
+                name="unique_student_academic_period",
+            ),
         ]
 
         indexes = [
@@ -169,22 +185,51 @@ class EducationHistory(models.Model):
     def clean(self):
         super().clean()
 
+        current_year = date.today().year
+
+        if not re.match(r"^\d{4}/\d{4}$", self.academic_year):
+            raise ValidationError({
+                "academic_year":
+                "Учебный год должен быть указан в формате 2021/2022."
+            })
+
+        start_year, end_year = map(
+            int,
+            self.academic_year.split("/")
+        )
+
+        if end_year != start_year + 1:
+            raise ValidationError({
+                "academic_year":
+                "Учебный год должен состоять из двух последовательных лет."
+            })
+
+        if start_year < 1990 or start_year > current_year + 1:
+            raise ValidationError({
+                "academic_year":
+                "Некорректный учебный год."
+            })
+
         if self.course < 1:
             raise ValidationError({
-                "course": "Курс должен быть не меньше 1."
+                "course":
+                "Курс должен быть не меньше 1."
             })
 
         if self.course > 10:
             raise ValidationError({
-                "course": "Некорректный номер курса."
+                "course":
+                "Некорректный номер курса."
             })
 
         if self.semester not in (1, 2):
             raise ValidationError({
-                "semester": "Семестр должен быть 1 или 2."
+                "semester":
+                "Семестр должен быть 1 или 2."
             })
 
         if self.start_date and self.end_date:
+
             if self.end_date < self.start_date:
                 raise ValidationError({
                     "end_date":
@@ -193,6 +238,7 @@ class EducationHistory(models.Model):
 
         if (
             self.status in (
+                EducationHistoryStatus.TRANSFERRED,
                 EducationHistoryStatus.GRADUATED,
                 EducationHistoryStatus.EXPELLED,
             )
@@ -202,6 +248,7 @@ class EducationHistory(models.Model):
                 "end_date":
                 "Для завершённого периода необходимо указать дату окончания."
             })
+
 
     def save(self, *args, **kwargs):
         self.full_clean()

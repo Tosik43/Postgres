@@ -135,4 +135,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    const statusField = document.getElementById("id_status");
+    const changeReasonsBlock = document.getElementById("change-reasons-block");
+
+    if (!statusField || !changeReasonsBlock) {
+        return;
+    }
+
+    function updateChangeReasonsVisibility() {
+
+        if (statusField.value === "studying") {
+            changeReasonsBlock.style.display = "none";
+
+            changeReasonsBlock
+                .querySelectorAll("input[type='checkbox']")
+                .forEach(function (checkbox) {
+                    checkbox.checked = false;
+                });
+
+        } else {
+            changeReasonsBlock.style.display = "";
+        }
+    }
+
+    statusField.addEventListener(
+        "change",
+        updateChangeReasonsVisibility
+    );
+
+    updateChangeReasonsVisibility();
 });

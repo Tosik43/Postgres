@@ -1,0 +1,388 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if history_record %}
+        Редактирование истории обучения
+    {% else %}
+        Добавление записи истории обучения
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="mb-1">
+            {% if history_record %}
+                Редактирование записи
+            {% else %}
+                Добавление записи
+            {% endif %}
+        </h2>
+
+        <div class="text-muted">
+            Студент:
+            <strong>{{ student.full_name }}</strong>
+        </div>
+    </div>
+
+    <a
+        href="{% url 'education_history_list' student.pk %}"
+        class="btn btn-secondary"
+    >
+        ← Назад
+    </a>
+
+</div>
+
+
+<form method="post">
+
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <strong>Обучение</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <!-- Факультет -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="{{ form.faculty.id_for_label }}"
+                        class="form-label"
+                    >
+                        Факультет
+                    </label>
+
+                    {{ form.faculty }}
+
+                    {% for error in form.faculty.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Образовательная программа -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="{{ form.educational_program.id_for_label }}"
+                        class="form-label"
+                    >
+                        Образовательная программа
+                    </label>
+
+                    {{ form.educational_program }}
+
+                    {% for error in form.educational_program.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Учебный год -->
+
+                <div class="col-md-3">
+
+                    <label
+                        for="{{ form.academic_year.id_for_label }}"
+                        class="form-label"
+                    >
+                        Учебный год
+                    </label>
+
+                    {{ form.academic_year }}
+
+                    {% for error in form.academic_year.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Курс -->
+
+                <div class="col-md-3">
+
+                    <label
+                        for="{{ form.course.id_for_label }}"
+                        class="form-label"
+                    >
+                        Курс
+                    </label>
+
+                    {{ form.course }}
+
+                    {% for error in form.course.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Семестр -->
+
+                <div class="col-md-3">
+
+                    <label
+                        for="{{ form.semester.id_for_label }}"
+                        class="form-label"
+                    >
+                        Семестр
+                    </label>
+
+                    {{ form.semester }}
+
+                    {% for error in form.semester.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Группа -->
+
+                <div class="col-md-3">
+
+                    <label
+                        for="{{ form.study_group.id_for_label }}"
+                        class="form-label"
+                    >
+                        Учебная группа
+                    </label>
+
+                    {{ form.study_group }}
+
+                    {% for error in form.study_group.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <strong>Условия обучения</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <!-- Форма обучения -->
+
+                <div class="col-md-4">
+
+                    <label
+                        for="{{ form.study_form.id_for_label }}"
+                        class="form-label"
+                    >
+                        Форма обучения
+                    </label>
+
+                    {{ form.study_form }}
+
+                    {% for error in form.study_form.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Финансирование -->
+
+                <div class="col-md-4">
+
+                    <label
+                        for="{{ form.funding_type.id_for_label }}"
+                        class="form-label"
+                    >
+                        Тип финансирования
+                    </label>
+
+                    {{ form.funding_type }}
+
+                    {% for error in form.funding_type.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Статус -->
+
+                <div class="col-md-4">
+
+                    <label
+                        for="{{ form.status.id_for_label }}"
+                        class="form-label"
+                    >
+                        Статус обучения
+                    </label>
+
+                    {{ form.status }}
+
+                    {% for error in form.status.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <strong>Период обучения</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <!-- Начало -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="{{ form.start_date.id_for_label }}"
+                        class="form-label"
+                    >
+                        Начало обучения
+                    </label>
+
+                    {{ form.start_date }}
+
+                    {% for error in form.start_date.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Конец -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="{{ form.end_date.id_for_label }}"
+                        class="form-label"
+                    >
+                        Конец обучения
+                    </label>
+
+                    {{ form.end_date }}
+
+                    {% for error in form.end_date.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-text">
+                        Для текущего периода можно оставить поле пустым.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="change-reasons-block">
+
+        <label class="form-label">
+            Причины изменения
+        </label>
+
+        {{ form.change_reasons }}
+
+        {% if form.change_reasons.errors %}
+            <div class="invalid-feedback d-block">
+                {{ form.change_reasons.errors }}
+            </div>
+        {% endif %}
+
+    </div>
+
+
+    <div class="d-flex justify-content-end gap-2">
+
+        <a
+            href="{% url 'education_history_list' student.pk %}"
+            class="btn btn-secondary"
+        >
+            Отмена
+        </a>
+
+        <button
+            type="submit"
+            class="btn btn-success"
+        >
+            {% if history_record %}
+                Сохранить изменения
+            {% else %}
+                Добавить запись
+            {% endif %}
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

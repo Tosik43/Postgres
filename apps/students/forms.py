@@ -74,7 +74,7 @@ class EducationHistoryForm(forms.ModelForm):
         fields = [
             "faculty",
             "educational_program",
-            "enrollment_year",
+            "academic_year",
             "course",
             "semester",
             "study_group",
@@ -88,10 +88,11 @@ class EducationHistoryForm(forms.ModelForm):
 
         widgets = {
 
-            "enrollment_year": forms.NumberInput(
+            "academic_year": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "min": 1990,
+                    "placeholder": "2021/2022",
+                    "maxlength": 9,
                 }
             ),
 
@@ -154,10 +155,9 @@ class EducationHistoryForm(forms.ModelForm):
                 }
             ),
 
-            "change_reasons": forms.SelectMultiple(
+            "change_reasons": forms.CheckboxSelectMultiple(
                 attrs={
-                    "class": "form-select",
-                    "size": 6,
+                    "class": "change-reasons-checkboxes",
                 }
             ),
         }
@@ -175,7 +175,6 @@ class EducationHistoryForm(forms.ModelForm):
             "%Y-%m-%d"
         ]
 
-        # Только активные причины
         self.fields["change_reasons"].queryset = (
             ChangeReason.objects
             .filter(is_active=True)
@@ -194,6 +193,26 @@ class EducationHistoryForm(forms.ModelForm):
             .order_by("code", "name")
         )
 
+        self.fields["faculty"].empty_label = (
+            "Выберите факультет"
+        )
+
+        self.fields["educational_program"].empty_label = (
+            "Выберите образовательную программу"
+        )
+
+        self.fields["study_form"].empty_label = (
+            "Выберите форму обучения"
+        )
+
+        self.fields["funding_type"].empty_label = (
+            "Выберите тип финансирования"
+        )
+
+        self.fields["status"].empty_label = (
+            "Выберите статус"
+        )
+
         for field_name, field in self.fields.items():
 
             css_class = field.widget.attrs.get(
@@ -207,3 +226,5 @@ class EducationHistoryForm(forms.ModelForm):
                 )
             else:
                 field.widget.attrs["class"] = css_class
+
+            self.fields["change_reasons"].required = False

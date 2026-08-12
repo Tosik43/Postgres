@@ -264,7 +264,7 @@ def education_history_list(request, student_pk):
         )
         .prefetch_related("change_reasons")
         .order_by(
-            "-enrollment_year",
+            "-academic_year",
             "-course",
             "-semester"
         )
