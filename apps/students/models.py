@@ -3,6 +3,14 @@ from .validators import *
 from django.core.exceptions import ValidationError
 from datetime import date
 
+from .education_history import (
+    StudyForm,
+    FundingType,
+    EducationHistoryStatus,
+    ChangeReason,
+    EducationHistory,
+)
+
 
 class StudyStatus(models.TextChoices):
     STUDYING = "studying", "Обучается"
