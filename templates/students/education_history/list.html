@@ -112,7 +112,29 @@
                             </td>
 
                             <td>
-                                {{ record.get_status_display }}
+                                {% if record.status == "transferred" and record.change_reasons.all %}
+                                    <span
+                                        class="status-with-reason"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="{% for reason in record.change_reasons.all %}{{ reason.name }}{% if not forloop.last %}, {% endif %}{% endfor %}"
+                                    >
+                                        {{ record.get_status_display }}
+                                    </span>
+
+                                {% elif record.status == "expelled" and record.student.expulsion_reason %}
+                                    <span
+                                        class="status-with-reason"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="{{ record.student.expulsion_reason }}"
+                                    >
+                                        {{ record.get_status_display }}
+                                    </span>
+
+                                {% else %}
+                                    {{ record.get_status_display }}
+                                {% endif %}
                             </td>
 
                             <td>

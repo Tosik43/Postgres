@@ -2,6 +2,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("Application loaded");
 
+    document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach(function (element) {
+        new bootstrap.Tooltip(element);
+    });
+
     document.querySelectorAll('.auto-submit').forEach(function(select) {
         select.addEventListener('change', function() {
             const form = this.closest('form');
@@ -10,6 +16,71 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+    const educationalProgramSelect =
+        document.querySelector(".searchable-program");
+
+    if (educationalProgramSelect) {
+
+        new TomSelect(
+            educationalProgramSelect,
+            {
+
+                placeholder:
+                    "Выберите образовательную программу",
+
+                searchField: [
+                    "text"
+                ],
+
+                allowEmptyOption: false,
+
+                maxOptions: 50,
+
+                closeAfterSelect: true,
+
+                onInitialize: function () {
+
+                    this.clear(true);
+
+                    this.control_input.placeholder =
+                        "Выберите образовательную программу";
+
+                },
+
+                onFocus: function () {
+
+                    if (!this.getValue()) {
+
+                        this.clear(true);
+
+                        this.control_input.value = "";
+
+                        this.control_input.placeholder = "";
+
+                    }
+
+                },
+
+                onChange: function (value) {
+
+                    if (value) {
+
+                        this.control_input.placeholder = "";
+
+                    } else {
+
+                        this.control_input.placeholder =
+                            "Выберите образовательную программу";
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
 
     const studentForeverModal =
         document.getElementById("deleteStudentForeverModal");

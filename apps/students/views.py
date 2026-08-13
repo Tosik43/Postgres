@@ -287,14 +287,16 @@ def education_history_create(request, student_pk):
     )
 
     if request.method == "POST":
-        form = EducationHistoryForm(request.POST)
+
+        form = EducationHistoryForm(
+            request.POST
+        )
+
+        form.instance.student = student
 
         if form.is_valid():
-            history = form.save(commit=False)
-            history.student = student
-            history.save()
 
-            form.save_m2m()
+            history = form.save()
 
             messages.success(
                 request,
@@ -307,6 +309,7 @@ def education_history_create(request, student_pk):
             )
 
     else:
+
         form = EducationHistoryForm()
 
     return render(
@@ -318,7 +321,6 @@ def education_history_create(request, student_pk):
             "history_record": None,
         }
     )
-
 
 def education_history_edit(request, pk):
     history_record = get_object_or_404(

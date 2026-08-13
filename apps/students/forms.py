@@ -96,11 +96,20 @@ class EducationHistoryForm(forms.ModelForm):
                 }
             ),
 
-            "course": forms.NumberInput(
+            "course": forms.Select(
+                choices=[
+                    (1, "1"),
+                    (2, "2"),
+                    (3, "3"),
+                    (4, "4"),
+                    (5, "5"),
+                    (6, "6"),
+                    (7, "7"),
+                    (8, "8"),
+                    (9, "9"),
+                ],
                 attrs={
-                    "class": "form-control",
-                    "min": 1,
-                    "max": 10,
+                    "class": "form-select",
                 }
             ),
 
@@ -111,6 +120,13 @@ class EducationHistoryForm(forms.ModelForm):
                 ],
                 attrs={
                     "class": "form-select",
+                }
+            ),
+
+            "educational_program": forms.Select(
+                attrs={
+                    "class": "form-select searchable-program",
+                    "data-placeholder": "Начните вводить программу...",
                 }
             ),
 

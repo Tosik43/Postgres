@@ -144,18 +144,6 @@ class EducationHistory(models.Model):
             "semester",
         ]
 
-        constraints = [
-            models.UniqueConstraint(
-                fields=[
-                    "student",
-                    "academic_year",
-                    "course",
-                    "semester",
-                ],
-                name="unique_student_academic_period",
-            ),
-        ]
-
         indexes = [
             models.Index(
                 fields=["student", "start_date"]
@@ -272,6 +260,35 @@ class EducationHistory(models.Model):
                 raise ValidationError({
                     "end_date":
                     "Дата окончания не может быть раньше даты начала."
+                })
+
+        if self.start_date and self.student_id:
+
+            overlapping_period = (
+                EducationHistory.objects
+                .filter(
+                    student_id=self.student_id,
+                    start_date__lte=(
+                        self.end_date
+                        if self.end_date
+                        else date.max
+                    ),
+                )
+                .exclude(pk=self.pk)
+                .filter(
+                    models.Q(end_date__isnull=True)
+                    | models.Q(
+                        end_date__gte=self.start_date
+                    )
+                )
+                .exists()
+            )
+
+            if overlapping_period:
+                raise ValidationError({
+                    "__all__":
+                    "Период обучения пересекается с "
+                    "другой записью этого студента."
                 })
 
         if (
