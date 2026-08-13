@@ -22,7 +22,15 @@
     <div class="row g-2 align-items-end">
         <div class="col-md-4">
             <label class="form-label">Поиск</label>
-            <input type="text" name="q" class="form-control" placeholder="ФИО или СНИЛС" value="{{ query }}">
+            <input
+                type="text"
+                id="student-search"
+                name="q"
+                class="form-control"
+                placeholder="ФИО или СНИЛС"
+                value="{{ query }}"
+                autocomplete="off"
+            >
         </div>
         <div class="col-md-2">
             <label class="form-label">Статус</label>
@@ -58,10 +66,12 @@
             </select>
         </div>
         <div class="col-md-2">
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary flex-fill">Найти</button>
-                <a href="{% url 'student_list' %}" class="btn btn-secondary flex-fill">Сброс</a>
-            </div>
+            <a
+                href="{% url 'student_list' %}"
+                class="btn btn-secondary w-100"
+            >
+                Сброс
+            </a>
         </div>
     </div>
 </form>

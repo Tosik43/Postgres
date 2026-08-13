@@ -8,4 +8,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
+
+    const searchInput =
+        document.getElementById("student-search");
+
+    if (searchInput) {
+
+        let searchTimer;
+
+        searchInput.addEventListener("input", () => {
+
+            clearTimeout(searchTimer);
+
+            searchTimer = setTimeout(() => {
+
+                searchInput.form.submit();
+
+            }, 300);
+
+        });
+
+    }
+
 });
