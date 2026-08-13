@@ -176,8 +176,8 @@ class EducationHistory(models.Model):
 
     def __str__(self):
         return (
-            f"{self.student} — "
-            f"{self.educational_program} — "
+            f"{self.student} - "
+            f"{self.educational_program} - "
             f"{self.course} курс, "
             f"{self.semester} семестр"
         )
@@ -209,6 +209,44 @@ class EducationHistory(models.Model):
                 "academic_year":
                 "Некорректный учебный год."
             })
+
+        academic_year_start = date(
+            start_year,
+            9,
+            1
+        )
+
+        academic_year_end = date(
+            end_year,
+            8,
+            31
+        )
+
+        if self.start_date:
+
+            if not (
+                academic_year_start
+                <= self.start_date
+                <= academic_year_end
+            ):
+                raise ValidationError({
+                    "start_date":
+                    f"Дата начала должна находиться "
+                    f"в пределах учебного года {self.academic_year}."
+                })
+
+        if self.end_date:
+
+            if not (
+                academic_year_start
+                <= self.end_date
+                <= academic_year_end
+            ):
+                raise ValidationError({
+                    "end_date":
+                    f"Дата окончания должна находиться "
+                    f"в пределах учебного года {self.academic_year}."
+                })
 
         if self.course < 1:
             raise ValidationError({

@@ -135,33 +135,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    const statusField = document.getElementById("id_status");
+        const statusField = document.getElementById("id_status");
     const changeReasonsBlock = document.getElementById("change-reasons-block");
 
-    if (!statusField || !changeReasonsBlock) {
-        return;
-    }
+    if (statusField && changeReasonsBlock) {
 
-    function updateChangeReasonsVisibility() {
+        function updateChangeReasonsVisibility() {
 
-        if (statusField.value === "studying") {
-            changeReasonsBlock.style.display = "none";
+            if (
+                !statusField.value ||
+                statusField.value === "studying"
+            ) {
+                changeReasonsBlock.style.display = "none";
 
-            changeReasonsBlock
-                .querySelectorAll("input[type='checkbox']")
-                .forEach(function (checkbox) {
-                    checkbox.checked = false;
-                });
+                changeReasonsBlock
+                    .querySelectorAll("input[type='checkbox']")
+                    .forEach(function (checkbox) {
+                        checkbox.checked = false;
+                    });
 
-        } else {
-            changeReasonsBlock.style.display = "";
+            } else {
+                changeReasonsBlock.style.display = "";
+            }
         }
+
+        statusField.addEventListener(
+            "change",
+            updateChangeReasonsVisibility
+        );
+
+        updateChangeReasonsVisibility();
     }
 
-    statusField.addEventListener(
-        "change",
-        updateChangeReasonsVisibility
-    );
+    const deleteEducationHistoryModal =
+        document.getElementById(
+            "deleteEducationHistoryModal"
+        );
 
-    updateChangeReasonsVisibility();
+    if (deleteEducationHistoryModal) {
+
+        const deleteEducationHistoryForm =
+            document.getElementById(
+                "deleteEducationHistoryForm"
+            );
+
+        const educationHistoryRecordName =
+            document.getElementById(
+                "educationHistoryRecordName"
+            );
+
+        deleteEducationHistoryModal.addEventListener(
+            "show.bs.modal",
+            function (event) {
+
+                const button = event.relatedTarget;
+
+                educationHistoryRecordName.textContent =
+                    button.dataset.name;
+
+                deleteEducationHistoryForm.action =
+                    button.dataset.url;
+
+            }
+        );
+
+    }
+
 });

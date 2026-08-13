@@ -33,6 +33,18 @@ body {
     border-radius: 12px;
 }
 
+.education-history-table .academic-year-header td {
+    background-color: #e9ecef;
+    font-size: 1.05rem;
+    padding: 10px 14px;
+}
+
+.education-history-table .course-header td {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    padding: 8px 14px;
+}
+
 .educational-program-table {
     width: 100%;
     table-layout: fixed;
@@ -220,4 +232,14 @@ body {
 .student-table .actions-column {
     width: 1%;
     white-space: nowrap;
+}
+
+.table th {
+    background-color: #cfe2ff;
+    color: #212529;
+}
+
+.student-detail-table th {
+    background-color: white;
+    color: black;
 }

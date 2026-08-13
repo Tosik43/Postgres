@@ -43,171 +43,119 @@
 
 <div class="table-responsive">
 
-    <table class="table table-bordered table-hover align-middle education-history-table">
+    <table class="table table-bordered align-middle education-history-table">
 
         <thead class="table-primary text-center">
-
             <tr>
-
-                <th>Учебный год</th>
-
-                <th>Курс</th>
-
                 <th>Семестр</th>
-
                 <th>Факультет</th>
-
                 <th>Образовательная программа</th>
-
                 <th>Группа</th>
-
                 <th>Форма обучения</th>
-
                 <th>Финансирование</th>
-
                 <th>Статус</th>
-
                 <th>Период обучения</th>
-
-                <th>Причины изменения</th>
-
                 <th>Действия</th>
-
             </tr>
-
         </thead>
-
 
         <tbody>
 
-            {% for record in history %}
+            {% regroup history by academic_year as academic_years %}
 
-            <tr>
+            {% for academic_year in academic_years %}
 
-                <td class="text-center">
-                    {{ record.academic_year }}
-                </td>
+                <tr class="academic-year-header">
+                    <td colspan="10">
+                        <strong>{{ academic_year.grouper }}</strong>
+                    </td>
+                </tr>
 
+                {% regroup academic_year.list by course as courses %}
 
-                <td class="text-center">
-                    {{ record.course }}
-                </td>
+                {% for course in courses %}
 
+                    <tr class="course-header">
+                        <td colspan="10">
+                            <strong>
+                                {{ course.grouper }} курс
+                            </strong>
+                        </td>
+                    </tr>
 
-                <td class="text-center">
-                    {{ record.semester }}
-                </td>
+                    {% for record in course.list %}
 
+                        <tr>
 
-                <td>
-                    {{ record.faculty }}
-                </td>
+                            <td>
+                                {{ record.semester }}
+                            </td>
 
+                            <td>
+                                {{ record.faculty.abbreviation }}
+                            </td>
 
-                <td>
-                    <strong>
-                        {{ record.educational_program.code }}
-                    </strong>
+                            <td>
+                                {{ record.educational_program }}
+                            </td>
 
-                    <br>
+                            <td>
+                                {{ record.study_group }}
+                            </td>
 
-                    <span class="text-muted">
-                        {{ record.educational_program.name }}
-                    </span>
-                </td>
+                            <td>
+                                {{ record.get_study_form_display }}
+                            </td>
 
+                            <td>
+                                {{ record.get_funding_type_display }}
+                            </td>
 
-                <td class="text-center">
-                    {{ record.study_group }}
-                </td>
+                            <td>
+                                {{ record.get_status_display }}
+                            </td>
 
+                            <td>
+                                {{ record.start_date|date:"d.m.Y" }}
 
-                <td>
-                    {{ record.get_study_form_display }}
-                </td>
+                                {% if record.end_date %}
+                                    -
+                                    {{ record.end_date|date:"d.m.Y" }}
+                                {% endif %}
+                            </td>
 
+                            <td class="text-nowrap">
 
-                <td>
-                    {{ record.get_funding_type_display }}
-                </td>
+                                <a href="{% url 'education_history_edit' record.pk %}"
+                                class="btn btn-sm btn-warning">
+                                    Редактировать
+                                </a>
 
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteEducationHistoryModal"
+                                    data-name="{{ record.educational_program }} - {{ record.course }} курс, {{ record.semester }} семестр"
+                                    data-url="{% url 'education_history_delete' record.pk %}">
+                                    Удалить
+                                </button>
 
-                <td>
-                    {{ record.get_status_display }}
-                </td>
+                            </td>
 
+                        </tr>
 
-                <td class="text-center">
+                    {% endfor %}
 
-                    {{ record.start_date|date:"d.m.Y" }}
+                {% endfor %}
 
-                    {% if record.end_date %}
-                        <br>
-                        <span class="text-muted">
-                            {{ record.end_date|date:"d.m.Y" }}
-                        </span>
-                    {% endif %}
+            {% empty %}
 
-                </td>
-
-
-                <td>
-
-                    {% if record.change_reasons.all %}
-
-                        {% for reason in record.change_reasons.all %}
-
-                            <span class="badge bg-secondary mb-1">
-                                {{ reason.name }}
-                            </span>
-
-                        {% empty %}
-
-                            <span class="text-muted">
-                                —
-                            </span>
-
-                        {% endfor %}
-
-                    {% else %}
-
-                        <span class="text-muted">
-                            —
-                        </span>
-
-                    {% endif %}
-
-                </td>
-
-
-                <td class="text-center">
-
-                    <div class="d-flex flex-wrap justify-content-center gap-1">
-
-                        <a
-                            href="{% url 'education_history_edit' record.pk %}"
-                            class="btn btn-warning btn-sm"
-                        >
-                            Изменить
-                        </a>
-
-
-                        <button
-                            type="button"
-                            class="btn btn-danger btn-sm"
-                            data-bs-toggle="modal"
-                            data-bs-target="#deleteEducationHistoryModal"
-                            data-name="{{ record.academic_year }} — {{ record.course }} курс, {{ record.semester }} семестр"
-                            data-url="{% url 'education_history_delete' record.pk %}"
-                        >
-                            Удалить
-                        </button>
-
-                    </div>
-
-                </td>
-
-            </tr>
+                <tr>
+                    <td colspan="9" class="text-center">
+                        История обучения пока отсутствует.
+                    </td>
+                </tr>
 
             {% endfor %}
 
@@ -228,7 +176,6 @@
 {% endif %}
 
 
-<!-- Модальное окно удаления -->
 
 <div
     class="modal fade"
@@ -308,48 +255,5 @@
     </div>
 
 </div>
-
-
-<script>
-
-const deleteEducationHistoryModal =
-    document.getElementById(
-        "deleteEducationHistoryModal"
-    );
-
-const deleteEducationHistoryForm =
-    document.getElementById(
-        "deleteEducationHistoryForm"
-    );
-
-const educationHistoryRecordName =
-    document.getElementById(
-        "educationHistoryRecordName"
-    );
-
-
-deleteEducationHistoryModal.addEventListener(
-    "show.bs.modal",
-    function (event) {
-
-        const button = event.relatedTarget;
-
-        const name = button.getAttribute(
-            "data-name"
-        );
-
-        const url = button.getAttribute(
-            "data-url"
-        );
-
-        educationHistoryRecordName.textContent =
-            name;
-
-        deleteEducationHistoryForm.action =
-            url;
-    }
-);
-
-</script>
 
 {% endblock %}

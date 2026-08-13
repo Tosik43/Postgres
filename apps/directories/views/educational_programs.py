@@ -70,7 +70,7 @@ def educational_program_create(request):
 
             messages.success(
                 request,
-                f'Образовательная программа "{program.code} — '
+                f'Образовательная программа "{program.code} - '
                 f'{program.name}" успешно добавлена.'
             )
 
@@ -191,7 +191,7 @@ def educational_program_delete_forever(request, pk):
         is_active=False
     )
 
-    name = f"{program.code} — {program.name}"
+    name = f"{program.code} - {program.name}"
 
     program.delete()
 
