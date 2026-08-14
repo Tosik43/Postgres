@@ -5,6 +5,8 @@ from .forms import StudentForm, EducationHistoryForm
 from .education_history import EducationHistory
 from django.contrib import messages
 from django.utils import timezone
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 def student_list(request):
 
@@ -71,6 +73,35 @@ def student_list(request):
         .order_by("-enrollment_year")
     )
 
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+
+        tbody = render_to_string(
+            "students/partials/student_table_body.html",
+            {
+                "students": students,
+            },
+            request=request,
+        )
+
+        thead = render_to_string(
+            "students/student_table_head.html",
+            {
+                "query": query,
+                "status": status,
+                "gender": gender,
+                "year": year,
+                "sort": sort,
+                "direction": direction,
+            },
+            request=request,
+        )
+
+        return JsonResponse({
+            "tbody": tbody,
+            "thead": thead,
+            "url": request.get_full_path(),
+        })
+
     return render(
         request,
         "students/student_list.html",
@@ -89,6 +120,45 @@ def student_list(request):
         }
     )
 
+def student_search(request):
+
+    query = request.GET.get("q", "")
+    status = request.GET.get("status", "")
+    gender = request.GET.get("gender", "")
+    year = request.GET.get("year", "")
+
+    students = Student.objects.filter(
+        is_active=True
+    )
+
+    if query:
+        students = students.filter(
+            Q(full_name__icontains=query) |
+            Q(snils__icontains=query)
+        )
+
+    if status:
+        students = students.filter(
+            study_status=status
+        )
+
+    if gender:
+        students = students.filter(
+            gender=gender
+        )
+
+    if year:
+        students = students.filter(
+            enrollment_year=year
+        )
+
+    return render(
+        request,
+        "students/partials/student_table_body.html",
+        {
+            "students": students,
+        }
+    )
 
 def student_detail(request, pk):
 

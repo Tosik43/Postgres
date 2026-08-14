@@ -1,0 +1,61 @@
+<tr>
+    <th>
+        <a
+            class="text-decoration-none text-dark ajax-sort"
+            href="?q={{ query }}&status={{ status }}&gender={{ gender }}&year={{ year }}&sort=full_name&direction={% if sort == 'full_name' and direction == 'asc' %}desc{% else %}asc{% endif %}"
+        >
+            ФИО
+            {% if sort == "full_name" %}
+                {% if direction == "asc" %}▲{% else %}▼{% endif %}
+            {% else %}
+                ↕
+            {% endif %}
+        </a>
+    </th>
+
+    <th>
+        <a
+            class="text-decoration-none text-dark ajax-sort"
+            href="?q={{ query }}&status={{ status }}&gender={{ gender }}&year={{ year }}&sort=snils&direction={% if sort == 'snils' and direction == 'asc' %}desc{% else %}asc{% endif %}"
+        >
+            СНИЛС
+            {% if sort == "snils" %}
+                {% if direction == "asc" %}▲{% else %}▼{% endif %}
+            {% else %}
+                ↕
+            {% endif %}
+        </a>
+    </th>
+
+    <th>
+        <a
+            class="text-decoration-none text-dark ajax-sort"
+            href="?q={{ query }}&status={{ status }}&gender={{ gender }}&year={{ year }}&sort=study_status&direction={% if sort == 'study_status' and direction == 'asc' %}desc{% else %}asc{% endif %}"
+        >
+            Статус
+            {% if sort == "study_status" %}
+                {% if direction == "asc" %}▲{% else %}▼{% endif %}
+            {% else %}
+                ↕
+            {% endif %}
+        </a>
+    </th>
+
+    <th>
+        <a
+            class="text-decoration-none text-dark ajax-sort"
+            href="?q={{ query }}&status={{ status }}&gender={{ gender }}&year={{ year }}&sort=enrollment_year&direction={% if sort == 'enrollment_year' and direction == 'asc' %}desc{% else %}asc{% endif %}"
+        >
+            Год поступления
+            {% if sort == "enrollment_year" %}
+                {% if direction == "asc" %}▲{% else %}▼{% endif %}
+            {% else %}
+                ↕
+            {% endif %}
+        </a>
+    </th>
+
+    <th class="actions-column">
+        Действия
+    </th>
+</tr>

@@ -8,14 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
         new bootstrap.Tooltip(element);
     });
 
-    document.querySelectorAll('.auto-submit').forEach(function(select) {
-        select.addEventListener('change', function() {
-            const form = this.closest('form');
-            if (form) {
-                form.submit();
-            }
-        });
-    });
 
     const educationalProgramSelect =
         document.querySelector(".searchable-program");

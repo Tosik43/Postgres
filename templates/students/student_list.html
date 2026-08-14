@@ -65,10 +65,11 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-md flex-grow-1">
             <a
                 href="{% url 'student_list' %}"
                 class="btn btn-secondary w-100"
+                id="reset-student-filters"
             >
                 Сброс
             </a>
@@ -79,68 +80,14 @@
 <!-- Таблица -->
 <div class="table-responsive">
     <table class="table table-bordered table-hover align-middle student-table">
-        <thead class="table-primary text-center">
-            <tr>
-                <th>
-                    <a class="text-decoration-none text-dark" href="?q={{ query }}&status={{ status }}&gender={{ gender }}&year={{ year }}&sort=full_name&direction={% if sort == 'full_name' and direction == 'asc' %}desc{% else %}asc{% endif %}">
-                        ФИО
-                        {% if sort == "full_name" %}
-                            {% if direction == "asc" %}▲{% else %}▼{% endif %}
-                        {% else %}↕{% endif %}
-                    </a>
-                </th>
-                <th>
-                    <a class="text-decoration-none text-dark" href="?q={{ query }}&status={{ status }}&gender={{ gender }}&year={{ year }}&sort=snils&direction={% if sort == 'snils' and direction == 'asc' %}desc{% else %}asc{% endif %}">
-                        СНИЛС
-                        {% if sort == "snils" %}
-                            {% if direction == "asc" %}▲{% else %}▼{% endif %}
-                        {% else %}↕{% endif %}
-                    </a>
-                </th>
-                <th>
-                    <a class="text-decoration-none text-dark" href="?q={{ query }}&status={{ status }}&gender={{ gender }}&year={{ year }}&sort=study_status&direction={% if sort == 'study_status' and direction == 'asc' %}desc{% else %}asc{% endif %}">
-                        Статус
-                        {% if sort == "study_status" %}
-                            {% if direction == "asc" %}▲{% else %}▼{% endif %}
-                        {% else %}↕{% endif %}
-                    </a>
-                </th>
-                <th>
-                    <a class="text-decoration-none text-dark" href="?q={{ query }}&status={{ status }}&gender={{ gender }}&year={{ year }}&sort=enrollment_year&direction={% if sort == 'enrollment_year' and direction == 'asc' %}desc{% else %}asc{% endif %}">
-                        Год поступления
-                        {% if sort == "enrollment_year" %}
-                            {% if direction == "asc" %}▲{% else %}▼{% endif %}
-                        {% else %}↕{% endif %}
-                    </a>
-                </th>
-                <th class="actions-column">Действия</th>
-            </tr>
+        <thead
+            id="student-table-head"
+            class="table-primary text-center"
+        >
+            {% include "students/student_table_head.html" %}
         </thead>
-        <tbody>
-            {% for student in students %}
-                <tr>
-                    <td>
-                        <a href="{% url 'student_detail' student.id %}" class="student-name-link">
-                            {{ student.full_name }}
-                        </a>
-                    </td>
-                    <td>{{ student.snils }}</td>
-                    <td>{{ student.get_study_status_display }}</td>
-                    <td>{{ student.enrollment_year }}</td>
-                    <td class="actions-column">
-                        <a href="{% url 'student_edit' student.id %}" class="btn btn-warning btn-sm">Изменить</a>
-                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                data-id="{{ student.id }}" data-name="{{ student.full_name }}"
-                                data-url="{% url 'student_delete' student.id %}">
-                            Удалить
-                        </button>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="5" class="text-center">Студенты не найдены</td>
-                </tr>
-            {% endfor %}
+        <tbody id="student-table-body">
+            {% include "students/partials/student_table_body.html" %}
         </tbody>
     </table>
 </div>

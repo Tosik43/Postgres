@@ -10,6 +10,11 @@ urlpatterns = [
         name="student_list",
     ),
     path(
+        "student-search/",
+        views.student_search,
+        name="student_search",
+    ),
+    path(
         "add/",
         views.student_create,
         name="student_create",
