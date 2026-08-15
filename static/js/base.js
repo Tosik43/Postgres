@@ -207,7 +207,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (
                 !statusField.value ||
-                statusField.value === "studying"
+                statusField.value === "studying" ||
+                statusField.value === "graduated" ||
+                statusField.value === "expelled"
             ) {
                 changeReasonsBlock.style.display = "none";
 
@@ -262,6 +264,42 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         );
 
+    }
+
+    const educationStatusField =
+        document.getElementById("id_status");
+
+    const expulsionReasonBlock =
+        document.getElementById("expulsion-reason-block");
+
+    if (educationStatusField && expulsionReasonBlock) {
+
+        function updateExpulsionReasonVisibility() {
+
+            if (educationStatusField.value === "expelled") {
+
+                expulsionReasonBlock.style.display = "";
+
+            } else {
+
+                expulsionReasonBlock.style.display = "none";
+
+                const reasonField =
+                    expulsionReasonBlock.querySelector("input, textarea");
+
+                if (reasonField) {
+                    reasonField.value = "";
+                }
+
+            }
+        }
+
+        educationStatusField.addEventListener(
+            "change",
+            updateExpulsionReasonVisibility
+        );
+
+        updateExpulsionReasonVisibility();
     }
 
 });

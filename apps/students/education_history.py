@@ -125,6 +125,15 @@ class EducationHistory(models.Model):
         verbose_name="Причины изменения"
     )
 
+    expulsion_reason = models.ForeignKey(
+        ChangeReason,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="expulsion_history",
+        verbose_name="Причина отчисления"
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )

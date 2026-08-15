@@ -167,11 +167,29 @@ def student_detail(request, pk):
         pk=pk
     )
 
+    current_education = (
+        student.education_history
+        .select_related(
+            "faculty",
+            "educational_program",
+        )
+        .order_by("-start_date")
+        .first()
+    )
+
+    first_education = (
+        student.education_history
+        .order_by("start_date")
+        .first()
+    )
+
     return render(
         request,
         "students/student_detail.html",
         {
-            "student": student
+            "student": student,
+            "current_education": current_education,
+            "first_education": first_education,
         }
     )
 

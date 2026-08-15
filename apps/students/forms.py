@@ -84,6 +84,7 @@ class EducationHistoryForm(forms.ModelForm):
             "start_date",
             "end_date",
             "change_reasons",
+            "expulsion_reason",
         ]
 
         widgets = {
@@ -176,6 +177,13 @@ class EducationHistoryForm(forms.ModelForm):
                     "class": "change-reasons-checkboxes",
                 }
             ),
+
+            "expulsion_reason": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "class": "form-control",
+                }
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -192,6 +200,12 @@ class EducationHistoryForm(forms.ModelForm):
         ]
 
         self.fields["change_reasons"].queryset = (
+            ChangeReason.objects
+            .filter(is_active=True)
+            .order_by("name")
+        )
+
+        self.fields["expulsion_reason"].queryset = (
             ChangeReason.objects
             .filter(is_active=True)
             .order_by("name")

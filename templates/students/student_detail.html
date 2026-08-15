@@ -47,8 +47,29 @@
             </tr>
 
             <tr>
+                <th>Год поступления</th>
+                <td>
+                    {% if first_education %}
+                        {{ first_education.start_date|date:"Y" }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
                 <th>Статус</th>
-                <td>{{ student.get_study_status_display }}</td>
+                <td>
+                    {% if current_education %}
+                        {% if current_education.status == "transferred" %}
+                            Обучается
+                        {% else %}
+                            {{ current_education.get_status_display }}
+                        {% endif %}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
             </tr>
 
             {% if student.study_status == "expelled" %}
