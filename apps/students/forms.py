@@ -204,13 +204,7 @@ class EducationHistoryForm(forms.ModelForm):
             .filter(is_active=True)
             .order_by("name")
         )
-
-        self.fields["expulsion_reason"].queryset = (
-            ChangeReason.objects
-            .filter(is_active=True)
-            .order_by("name")
-        )
-
+        
         self.fields["faculty"].queryset = (
             self.fields["faculty"].queryset
             .filter(is_active=True)

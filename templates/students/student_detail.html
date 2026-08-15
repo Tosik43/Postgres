@@ -72,10 +72,27 @@
                 </td>
             </tr>
 
-            {% if student.study_status == "expelled" %}
+            <tr>
+                <th>Год окончания</th>
+                <td>
+                    {% if last_finished_education %}
+                        {{ last_finished_education.end_date|date:"Y" }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+
+            {% if current_education and current_education.status == "expelled" %}
             <tr>
                 <th>Причина отчисления</th>
-                <td>{{ student.expulsion_reason }}</td>
+                <td>
+                    {% if current_education.expulsion_reason %}
+                        {{ current_education.expulsion_reason }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
             </tr>
             {% endif %}
 

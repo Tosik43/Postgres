@@ -1,8 +1,8 @@
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Subquery
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Student, StudyStatus, Gender
+from .models import Student, StudyStatus, Gender, EducationHistory
 from .forms import StudentForm, EducationHistoryForm
-from .education_history import EducationHistory
+from .education_history import EducationHistory, EducationHistoryStatus
 from django.contrib import messages
 from django.utils import timezone
 from django.http import JsonResponse
@@ -22,8 +22,27 @@ def student_list(request):
     query_params.pop("sort", None)
     query_params.pop("direction", None)
 
-    students = Student.objects.filter(
-        is_active=True
+    latest_education = (
+        EducationHistory.objects
+        .filter(
+            student=OuterRef("pk")
+        )
+        .order_by(
+            "-start_date",
+            "-id"
+        )
+    )
+
+    students = (
+        Student.objects
+        .filter(
+            is_active=True
+        )
+        .annotate(
+            current_status=Subquery(
+                latest_education.values("status")[:1]
+            )
+        )
     )
 
     if query:
@@ -32,9 +51,17 @@ def student_list(request):
             Q(snils__icontains=query)
         )
 
-    if status:
+    if status == EducationHistoryStatus.STUDYING:
         students = students.filter(
-            study_status=status
+            current_status__in=[
+                EducationHistoryStatus.STUDYING,
+                EducationHistoryStatus.TRANSFERRED,
+            ]
+        )
+
+    elif status:
+        students = students.filter(
+            current_status=status
         )
 
     if gender:
@@ -183,6 +210,19 @@ def student_detail(request, pk):
         .first()
     )
 
+    last_finished_education = (
+        student.education_history
+        .filter(
+            end_date__isnull=False,
+            status__in=[
+                EducationHistoryStatus.EXPELLED,
+                EducationHistoryStatus.GRADUATED,
+            ],
+        )
+        .order_by("-end_date")
+        .first()
+    )
+
     return render(
         request,
         "students/student_detail.html",
@@ -190,6 +230,7 @@ def student_detail(request, pk):
             "student": student,
             "current_education": current_education,
             "first_education": first_education,
+            "last_finished_education": last_finished_education,
         }
     )
 
