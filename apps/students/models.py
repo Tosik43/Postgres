@@ -11,14 +11,6 @@ from .education_history import (
     EducationHistory,
 )
 
-
-class StudyStatus(models.TextChoices):
-    STUDYING = "studying", "Обучается"
-    EXPELLED = "expelled", "Отчислен"
-    GRADUATED = "graduated", "Выпустился"
-    ACADEMIC = "academic_leave", "Академический отпуск"
-
-
 class Gender(models.TextChoices):
     MALE = "M", "Мужской"
     FEMALE = "F", "Женский"
@@ -68,8 +60,8 @@ class Student(models.Model):
     study_status = models.CharField(
     "Статус обучения",
     max_length=20,
-    choices=StudyStatus.choices,
-    default=StudyStatus.STUDYING
+    choices=EducationHistoryStatus.choices,
+    default=EducationHistoryStatus.STUDYING
     )
 
     expulsion_reason = models.TextField(
@@ -178,7 +170,7 @@ class Student(models.Model):
                 })
 
         if (
-            self.study_status == StudyStatus.EXPELLED
+            self.study_status == EducationHistoryStatus.EXPELLED
             and
             not self.expulsion_reason.strip()
         ):

@@ -127,40 +127,6 @@
 
             </div>
 
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">{{ form.study_status.label }}</label>
-                    {{ form.study_status }}
-                    {% if form.study_status.errors %}
-                        <div class="invalid-feedback d-block">
-                            {{ form.study_status.errors.0 }}
-                        </div>
-                    {% endif %}
-                </div>
-
-            </div>
-
-            <div class="row" id="expulsion-row" style="display: none;">
-
-                <div class="col-12 mb-3">
-
-                    <label class="form-label">
-                        {{ form.expulsion_reason.label }}
-                    </label>
-
-                    {{ form.expulsion_reason }}
-
-                    {% if form.expulsion_reason.errors %}
-                        <div class="invalid-feedback d-block">
-                            {{ form.expulsion_reason.errors.0 }}
-                        </div>
-                    {% endif %}
-
-                </div>
-
-            </div>
-
             <hr>
 
             <button type="submit" class="btn btn-success">

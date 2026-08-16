@@ -23,8 +23,6 @@ class StudentForm(forms.ModelForm):
             "phone",
             "enrollment_year",
             "graduation_year",
-            "study_status",
-            "expulsion_reason",
         ]
 
         widgets = {
@@ -36,14 +34,6 @@ class StudentForm(forms.ModelForm):
                     "class": "form-control",
                 }
             ),
-
-            "expulsion_reason": forms.Textarea(
-                attrs={
-                    "rows": 3,
-                    "class": "form-control",
-                }
-            ),
-
         }
 
     def __init__(self, *args, **kwargs):
