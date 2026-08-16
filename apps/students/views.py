@@ -1,4 +1,12 @@
-from django.db.models import Q, OuterRef, Subquery
+from django.db.models import (
+    Q,
+    OuterRef,
+    Subquery,
+    Case,
+    When,
+    Value,
+    IntegerField,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Student, StudyStatus, Gender, EducationHistory
 from .forms import StudentForm, EducationHistoryForm
@@ -41,6 +49,23 @@ def student_list(request):
         .annotate(
             current_status=Subquery(
                 latest_education.values("status")[:1]
+            ),
+            current_start_date=Subquery(
+                latest_education.values("start_date")[:1]
+            ),
+            current_end_date=Subquery(
+                latest_education.values("end_date")[:1]
+            ),
+            education_enrollment_year=Subquery(
+                EducationHistory.objects
+                .filter(
+                    student=OuterRef("pk")
+                )
+                .order_by(
+                    "start_date",
+                    "id"
+                )
+                .values("start_date__year")[:1]
             )
         )
     )
@@ -71,33 +96,91 @@ def student_list(request):
 
     if year:
         students = students.filter(
-            enrollment_year=year
+            education_enrollment_year=year
         )
 
     allowed_sort_fields = {
         "full_name": "full_name",
         "snils": "snils",
-        "study_status": "study_status",
-        "enrollment_year": "enrollment_year",
+        "study_status": "current_status",
+        "enrollment_year": "education_enrollment_year",
     }
 
     sort_field = allowed_sort_fields.get(sort)
 
-    if sort_field:
+    if sort == "study_status":
+
+        students = students.annotate(
+            status_sort_order=Case(
+                When(
+                    current_status="academic_leave",
+                    then=Value(1),
+                ),
+                When(
+                    current_status="graduated",
+                    then=Value(2),
+                ),
+                When(
+                    current_status__in=[
+                        "studying",
+                        "transferred",
+                    ],
+                    then=Value(3),
+                ),
+                When(
+                    current_status="expelled",
+                    then=Value(4),
+                ),
+                default=Value(99),
+                output_field=IntegerField(),
+            )
+        )
+
         if direction == "desc":
-            students = students.order_by(f"-{sort_field}")
+            students = students.order_by(
+                "-status_sort_order"
+            )
         else:
-            students = students.order_by(sort_field)
+            students = students.order_by(
+                "status_sort_order"
+            )
+
+    elif sort_field:
+
+        if direction == "desc":
+            students = students.order_by(
+                f"-{sort_field}"
+            )
+        else:
+            students = students.order_by(
+                sort_field
+            )
 
     years = (
         Student.objects
         .filter(is_active=True)
+        .annotate(
+            first_education_year=Subquery(
+                EducationHistory.objects
+                .filter(
+                    student=OuterRef("pk")
+                )
+                .order_by(
+                    "start_date",
+                    "id"
+                )
+                .values("start_date__year")[:1]
+            )
+        )
         .values_list(
-            "enrollment_year",
+            "first_education_year",
             flat=True
         )
+        .exclude(
+            first_education_year__isnull=True
+        )
         .distinct()
-        .order_by("-enrollment_year")
+        .order_by("-first_education_year")
     )
 
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":

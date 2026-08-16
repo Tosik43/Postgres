@@ -16,11 +16,27 @@
     </td>
 
     <td>
-        {{ student.get_study_status_display }}
+        {% if student.current_status == "studying" %}
+            Обучается
+        {% elif student.current_status == "transferred" %}
+            Обучается
+        {% elif student.current_status == "academic_leave" %}
+            Академический отпуск
+        {% elif student.current_status == "expelled" %}
+            Отчислен
+        {% elif student.current_status == "graduated" %}
+            Выпустился
+        {% else %}
+            —
+        {% endif %}
     </td>
 
     <td>
-        {{ student.enrollment_year }}
+        {% if student.education_enrollment_year %}
+            {{ student.education_enrollment_year }}
+        {% else %}
+            —
+        {% endif %}
     </td>
 
     <td class="actions-column">
