@@ -18,14 +18,29 @@
     <td>
         {% if student.current_status == "studying" %}
             Обучается
+
         {% elif student.current_status == "transferred" %}
             Обучается
+
         {% elif student.current_status == "academic_leave" %}
             Академический отпуск
+
+        {% elif student.current_status == "expelled" and student.current_expulsion_reason %}
+            <span
+                class="status-with-reason"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="{{ student.current_expulsion_reason }}"
+            >
+                Отчислен
+            </span>
+
         {% elif student.current_status == "expelled" %}
             Отчислен
+
         {% elif student.current_status == "graduated" %}
             Выпустился
+
         {% else %}
             —
         {% endif %}

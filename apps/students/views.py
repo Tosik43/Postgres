@@ -57,6 +57,9 @@ def student_list(request):
             current_end_date=Subquery(
                 latest_education.values("end_date")[:1]
             ),
+            current_expulsion_reason=Subquery(
+                latest_education.values("expulsion_reason")[:1]
+            ),
             education_enrollment_year=Subquery(
                 EducationHistory.objects
                 .filter(
