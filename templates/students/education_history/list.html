@@ -122,12 +122,12 @@
                                         {{ record.get_status_display }}
                                     </span>
 
-                                {% elif record.status == "expelled" and record.student.expulsion_reason %}
+                                {% elif record.status == "expelled" and record.expulsion_reason %}
                                     <span
                                         class="status-with-reason"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="top"
-                                        title="{{ record.student.expulsion_reason }}"
+                                        title="{{ record.expulsion_reason }}"
                                     >
                                         {{ record.get_status_display }}
                                     </span>

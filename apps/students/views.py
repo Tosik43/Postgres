@@ -15,6 +15,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.core.exceptions import ValidationError
 
 def student_list(request):
 
@@ -468,17 +469,22 @@ def education_history_create(request, student_pk):
 
         if form.is_valid():
 
-            history = form.save()
+            try:
+                history = form.save()
 
-            messages.success(
-                request,
-                "Запись истории обучения успешно добавлена."
-            )
+            except ValidationError as e:
+                form.add_error(None, e)
 
-            return redirect(
-                "education_history_list",
-                student_pk=student.pk
-            )
+            else:
+                messages.success(
+                    request,
+                    "Запись истории обучения успешно добавлена."
+                )
+
+                return redirect(
+                    "education_history_list",
+                    student_pk=student.pk
+                )
 
     else:
 
@@ -507,17 +513,23 @@ def education_history_edit(request, pk):
         )
 
         if form.is_valid():
-            form.save()
 
-            messages.success(
-                request,
-                "Запись истории обучения успешно сохранена."
-            )
+            try:
+                form.save()
 
-            return redirect(
-                "education_history_list",
-                student_pk=history_record.student.pk
-            )
+            except ValidationError as e:
+                form.add_error(None, e)
+
+            else:
+                messages.success(
+                    request,
+                    "Запись истории обучения успешно сохранена."
+                )
+
+                return redirect(
+                    "education_history_list",
+                    student_pk=history_record.student.pk
+                )
 
     else:
         form = EducationHistoryForm(

@@ -47,28 +47,6 @@ class Student(models.Model):
     validators=[validate_phone]
     )
 
-    enrollment_year = models.PositiveSmallIntegerField(
-        "Год поступления"
-    )
-
-    graduation_year = models.PositiveSmallIntegerField(
-        "Год окончания",
-        null=True,
-        blank=True
-    )
-
-    study_status = models.CharField(
-    "Статус обучения",
-    max_length=20,
-    choices=EducationHistoryStatus.choices,
-    default=EducationHistoryStatus.STUDYING
-    )
-
-    expulsion_reason = models.TextField(
-        "Причина отчисления",
-        blank=True
-    )
-
     created_at = models.DateTimeField(
         auto_now_add=True
     )
@@ -133,52 +111,7 @@ class Student(models.Model):
             raise ValidationError({
                 "birth_date": "Дата рождения обязательна для заполнения."
             })
-        
-        
-
-        if (
-            self.graduation_year
-            and
-            self.graduation_year < self.enrollment_year
-        ):
-            raise ValidationError({
-                "graduation_year":
-                "Год окончания не может быть меньше года поступления."
-            })
-
-        # Проверка дат
-
-        current_year = date.today().year
-
-        if (
-            self.enrollment_year < 1990
-            or
-            self.enrollment_year > current_year + 1
-        ):
-            raise ValidationError({
-                "enrollment_year":
-                "Некорректный год поступления."
-            })
-
-        if self.graduation_year:
-
-            if self.graduation_year > current_year + 10:
-
-                raise ValidationError({
-                    "graduation_year":
-                    "Некорректный год окончания."
-                })
-
-        if (
-            self.study_status == EducationHistoryStatus.EXPELLED
-            and
-            not self.expulsion_reason.strip()
-        ):
-            raise ValidationError({
-                "expulsion_reason": "Укажите причину отчисления."
-            })
-
-    
+            
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)

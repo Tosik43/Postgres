@@ -8,12 +8,10 @@ class StudentAdmin(admin.ModelAdmin):
         "id",
         "full_name",
         "snils",
-        "enrollment_year",
     )
 
     list_filter = (
         "gender",
-        "enrollment_year",
     )
 
     search_fields = (

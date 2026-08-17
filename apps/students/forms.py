@@ -21,8 +21,6 @@ class StudentForm(forms.ModelForm):
             "email",
             "vk",
             "phone",
-            "enrollment_year",
-            "graduation_year",
         ]
 
         widgets = {
