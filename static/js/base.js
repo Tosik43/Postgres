@@ -33,18 +33,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 onInitialize: function () {
 
-                    this.clear(true);
+                    if (!this.getValue()) {
 
-                    this.control_input.placeholder =
-                        "Выберите образовательную программу";
+                        this.control_input.placeholder =
+                            "Выберите образовательную программу";
+
+                    }
 
                 },
 
                 onFocus: function () {
 
                     if (!this.getValue()) {
-
-                        this.clear(true);
 
                         this.control_input.value = "";
 
