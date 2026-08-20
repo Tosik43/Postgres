@@ -11,6 +11,9 @@ from .education_history import (
     EducationHistory,
 )
 
+from .contact_person import  ContactPerson 
+
+
 class Gender(models.TextChoices):
     MALE = "M", "Мужской"
     FEMALE = "F", "Женский"
