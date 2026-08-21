@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import students
 from .views import education_history
+from .views import contact_person
 
 urlpatterns = [
     path(
@@ -63,5 +64,10 @@ urlpatterns = [
         "education-history/<int:pk>/delete/",
         education_history.education_history_delete,
         name="education_history_delete",
+    ),
+    path(
+        "<int:student_pk>/contact-person/add/",
+        contact_person.contact_person_create,
+        name="contact_person_create",
     ),
 ]

@@ -8,3 +8,14 @@ from .students import (
     student_restore,
     student_delete_forever,
 )
+
+from .education_history import (
+    education_history_list,
+    education_history_create,
+    education_history_edit,
+    education_history_delete
+)
+
+from .contact_person import (
+    contact_person_create
+)
