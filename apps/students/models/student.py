@@ -1,18 +1,9 @@
 from django.db import models
-from .validators import *
 from django.core.exceptions import ValidationError
 from datetime import date
 
-from .education_history import (
-    StudyForm,
-    FundingType,
-    EducationHistoryStatus,
-    ChangeReason,
-    EducationHistory,
-)
-
-from .contact_person import  ContactPerson 
-
+from ..validators import validate_snils, validate_phone
+from .education_history import EducationHistoryStatus
 
 class Gender(models.TextChoices):
     MALE = "M", "Мужской"

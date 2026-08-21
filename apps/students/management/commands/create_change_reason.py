@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from apps.students.education_history import ChangeReason
-
+from apps.students.models import ChangeReason
 
 class Command(BaseCommand):
 

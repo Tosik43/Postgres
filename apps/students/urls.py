@@ -1,67 +1,67 @@
 from django.urls import path
 
-from . import views
-
+from .views import students
+from .views import education_history
 
 urlpatterns = [
     path(
         "",
-        views.student_list,
+        students.student_list,
         name="student_list",
     ),
     path(
         "add/",
-        views.student_create,
+        students.student_create,
         name="student_create",
     ),
     path(
         "archive/",
-        views.student_archive,
+        students.student_archive,
         name="student_archive",
     ),
     path(
         "<int:pk>/",
-        views.student_detail,
+        students.student_detail,
         name="student_detail",
     ),
     path(
         "<int:pk>/edit/",
-        views.student_edit,
+        students.student_edit,
         name="student_edit",
     ),
     path(
         "<int:pk>/delete/",
-        views.student_delete,
+        students.student_delete,
         name="student_delete",
     ),
     path(
         "<int:pk>/restore/",
-        views.student_restore,
+        students.student_restore,
         name="student_restore",
     ),
     path(
         "<int:pk>/delete-forever/",
-        views.student_delete_forever,
+        students.student_delete_forever,
         name="student_delete_forever",
     ),
     path(
         "<int:student_pk>/education-history/",
-        views.education_history_list,
+        education_history.education_history_list,
         name="education_history_list",
     ),
     path(
         "<int:student_pk>/education-history/add/",
-        views.education_history_create,
+        education_history.education_history_create,
         name="education_history_create",
     ),
     path(
         "education-history/<int:pk>/edit/",
-        views.education_history_edit,
+        education_history.education_history_edit,
         name="education_history_edit",
     ),
     path(
         "education-history/<int:pk>/delete/",
-        views.education_history_delete,
+        education_history.education_history_delete,
         name="education_history_delete",
     ),
 ]

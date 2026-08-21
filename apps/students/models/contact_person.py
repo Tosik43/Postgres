@@ -1,6 +1,6 @@
 from django.db import models
 
-from .validators import validate_phone
+from ..validators import validate_phone
 
 
 class ContactPerson(models.Model):
