@@ -84,8 +84,10 @@
             </tr>
 
             {% if current_education and current_education.status == "expelled" %}
+
             <tr>
                 <th>Причина отчисления</th>
+
                 <td>
                     {% if current_education.expulsion_reason %}
                         {{ current_education.expulsion_reason }}
@@ -94,99 +96,290 @@
                     {% endif %}
                 </td>
             </tr>
+
             {% endif %}
 
         </table>
 
-        <div class="mt-4">
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
+        <ul class="nav nav-tabs mt-4" id="studentTabs" role="tablist">
 
-            <h4 class="mb-0">
-                Контактные лица
-            </h4>
+            <li class="nav-item" role="presentation">
 
-            <a
-                href="{% url 'contact_person_create' student.pk %}"
-                class="btn btn-primary"
+                <button
+                    class="nav-link active"
+                    id="contacts-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#contacts"
+                    type="button"
+                    role="tab"
+                    aria-controls="contacts"
+                    aria-selected="true"
+                >
+                    Контактные лица
+                </button>
+
+            </li>
+
+
+            <li class="nav-item" role="presentation">
+
+                <button
+                    class="nav-link"
+                    id="portfolio-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#portfolio"
+                    type="button"
+                    role="tab"
+                    aria-controls="portfolio"
+                    aria-selected="false"
+                >
+                    Портфолио
+                </button>
+
+            </li>
+
+
+            <li class="nav-item" role="presentation">
+
+                <button
+                    class="nav-link"
+                    id="education-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#education"
+                    type="button"
+                    role="tab"
+                    aria-controls="education"
+                    aria-selected="false"
+                >
+                    История обучения
+                </button>
+
+            </li>
+
+        </ul>
+
+
+        <div class="tab-content pt-4" id="studentTabsContent">
+
+            <div
+                class="tab-pane fade show active"
+                id="contacts"
+                role="tabpanel"
+                aria-labelledby="contacts-tab"
             >
-                Добавить контактное лицо
-            </a>
 
-        </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
 
-            <div class="table-responsive">
+                    <h4 class="mb-0">
+                        Контактные лица
+                    </h4>
 
-                <table class="table table-bordered">
+                    <a
+                        href="{% url 'contact_person_create' student.pk %}"
+                        class="btn btn-primary"
+                    >
+                        <i class="bi bi-plus-lg"></i>
+                        Добавить
+                    </a>
 
-                    <thead>
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered align-middle">
+
+                        <thead>
+
+                            <tr>
+                                <th>ФИО</th>
+                                <th>Родство</th>
+                                <th>Телефон</th>
+                                <th class="text-center" width="120">
+                                    Действия
+                                </th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for contact in student.contact_persons.all %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ contact.full_name }}
+                                    </td>
+
+                                    <td>
+                                        {{ contact.relationship }}
+                                    </td>
+
+                                    <td>
+                                        {{ contact.phone }}
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <div class="d-flex justify-content-center gap-2">
+
+                                            <a
+                                                href="{% url 'contact_person_edit' contact.pk %}"
+                                                class="btn btn-sm btn-outline-primary"
+                                                data-bs-toggle="tooltip"
+                                                title="Редактировать"
+                                            >
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-outline-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteContactPersonModal"
+                                                data-name="{{ contact.full_name }}"
+                                                data-url="{% url 'contact_person_delete' contact.pk %}"
+                                                title="Удалить"
+                                            >
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% empty %}
+
+                                <tr>
+
+                                    <td
+                                        colspan="4"
+                                        class="text-center text-muted py-4"
+                                    >
+                                        Контактные лица не указаны.
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div
+                class="tab-pane fade"
+                id="portfolio"
+                role="tabpanel"
+                aria-labelledby="portfolio-tab"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <h4 class="mb-0">
+                        Портфолио
+                    </h4>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        disabled
+                    >
+                        <i class="bi bi-plus-lg"></i>
+                        Добавить
+                    </button>
+
+                </div>
+
+                <div class="alert alert-light border">
+
+                    <span class="text-muted">
+                        Раздел портфолио будет добавлен следующим этапом.
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div
+                class="tab-pane fade"
+                id="education"
+                role="tabpanel"
+                aria-labelledby="education-tab"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <h4 class="mb-0">
+                        История обучения
+                    </h4>
+
+                    <a
+                        href="{% url 'education_history_list' student.pk %}"
+                        class="btn btn-primary"
+                    >
+                        Открыть полную историю
+                    </a>
+
+                </div>
+
+
+                {% if current_education %}
+
+                    <table class="table table-bordered">
+
                         <tr>
-                            <th>ФИО</th>
-                            <th>Родство</th>
-                            <th>Телефон</th>
-                            <th class="text-center" style="width: 120px;">
-                                Действия
-                            </th>
+                            <th width="250">Текущий факультет</th>
+                            <td>
+                                {{ current_education.faculty }}
+                            </td>
                         </tr>
-                    </thead>
 
-                    <tbody>
+                        <tr>
+                            <th>Образовательная программа</th>
+                            <td>
+                                {{ current_education.educational_program }}
+                            </td>
+                        </tr>
 
-                        {% for contact in student.contact_persons.all %}
+                        <tr>
+                            <th>Курс</th>
+                            <td>
+                                {{ current_education.course }}
+                            </td>
+                        </tr>
 
-                            <tr>
-                                <td>{{ contact.full_name }}</td>
-                                <td>{{ contact.relationship }}</td>
-                                <td>{{ contact.phone }}</td>
+                        <tr>
+                            <th>Форма обучения</th>
+                            <td>
+                                {{ current_education.get_study_form_display }}
+                            </td>
+                        </tr>
 
-                                <td class="text-center">
+                    </table>
 
-                                    <div class="d-flex justify-content-center gap-1">
+                {% else %}
 
-                                        <a
-                                            href="{% url 'contact_person_edit' contact.pk %}"
-                                            class="btn btn-sm btn-warning"
-                                            title="Редактировать"
-                                        >
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
+                    <div class="alert alert-light border text-muted">
+                        История обучения пока не заполнена.
+                    </div>
 
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-danger"
-                                            title="Удалить"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#deleteContactModal"
-                                            data-contact-name="{{ contact.full_name }}"
-                                            data-delete-url="{% url 'contact_person_delete' contact.pk %}"
-                                        >
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-
-                                    </div>
-
-                                </td>
-                            </tr>
-
-                        {% empty %}
-
-                            <tr>
-                                <td colspan="4" class="text-center text-muted">
-                                    Контактные лица не указаны.
-                                </td>
-                            </tr>
-
-                        {% endfor %}
-
-                    </tbody>
-
-                </table>
+                {% endif %}
 
             </div>
 
         </div>
 
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center mt-4">
 
             <div class="d-flex gap-2">
 
@@ -206,25 +399,20 @@
 
             </div>
 
-            <a
-                href="{% url 'education_history_list' student.id %}"
-                class="btn btn-primary"
-            >
-                История обучения
-            </a>
-
         </div>
+
     </div>
 
 </div>
 
 <div
     class="modal fade"
-    id="deleteContactModal"
+    id="deleteContactPersonModal"
     tabindex="-1"
-    aria-labelledby="deleteContactModalLabel"
+    aria-labelledby="deleteContactPersonModalLabel"
     aria-hidden="true"
 >
+
     <div class="modal-dialog modal-dialog-centered">
 
         <div class="modal-content">
@@ -233,7 +421,7 @@
 
                 <h5
                     class="modal-title"
-                    id="deleteContactModalLabel"
+                    id="deleteContactPersonModalLabel"
                 >
                     Удаление контактного лица
                 </h5>
@@ -247,19 +435,17 @@
 
             </div>
 
+
             <div class="modal-body">
 
                 <p class="mb-2">
                     Вы действительно хотите удалить контактное лицо?
                 </p>
 
-                <p class="fw-bold mb-0" id="deleteContactName"></p>
-
-                <div class="alert alert-warning mt-3 mb-0">
-                    Это действие нельзя отменить.
-                </div>
+                <p class="fw-semibold mb-0" id="contactPersonName"></p>
 
             </div>
+
 
             <div class="modal-footer">
 
@@ -273,15 +459,15 @@
 
                 <form
                     method="post"
-                    id="deleteContactForm"
+                    id="deleteContactPersonForm"
                 >
+
                     {% csrf_token %}
 
                     <button
                         type="submit"
                         class="btn btn-danger"
                     >
-                        <i class="bi bi-trash me-1"></i>
                         Удалить
                     </button>
 
@@ -292,6 +478,7 @@
         </div>
 
     </div>
+
 </div>
 
 {% endblock %}
