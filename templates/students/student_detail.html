@@ -124,6 +124,9 @@
                             <th>ФИО</th>
                             <th>Родство</th>
                             <th>Телефон</th>
+                            <th class="text-center" style="width: 120px;">
+                                Действия
+                            </th>
                         </tr>
                     </thead>
 
@@ -135,12 +138,40 @@
                                 <td>{{ contact.full_name }}</td>
                                 <td>{{ contact.relationship }}</td>
                                 <td>{{ contact.phone }}</td>
+
+                                <td class="text-center">
+
+                                    <div class="d-flex justify-content-center gap-1">
+
+                                        <a
+                                            href="{% url 'contact_person_edit' contact.pk %}"
+                                            class="btn btn-sm btn-warning"
+                                            title="Редактировать"
+                                        >
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-danger"
+                                            title="Удалить"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteContactModal"
+                                            data-contact-name="{{ contact.full_name }}"
+                                            data-delete-url="{% url 'contact_person_delete' contact.pk %}"
+                                        >
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+
+                                    </div>
+
+                                </td>
                             </tr>
 
                         {% empty %}
 
                             <tr>
-                                <td colspan="3" class="text-center text-muted">
+                                <td colspan="4" class="text-center text-muted">
                                     Контактные лица не указаны.
                                 </td>
                             </tr>
@@ -185,6 +216,82 @@
         </div>
     </div>
 
+</div>
+
+<div
+    class="modal fade"
+    id="deleteContactModal"
+    tabindex="-1"
+    aria-labelledby="deleteContactModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5
+                    class="modal-title"
+                    id="deleteContactModalLabel"
+                >
+                    Удаление контактного лица
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Закрыть"
+                ></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p class="mb-2">
+                    Вы действительно хотите удалить контактное лицо?
+                </p>
+
+                <p class="fw-bold mb-0" id="deleteContactName"></p>
+
+                <div class="alert alert-warning mt-3 mb-0">
+                    Это действие нельзя отменить.
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Отмена
+                </button>
+
+                <form
+                    method="post"
+                    id="deleteContactForm"
+                >
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                    >
+                        <i class="bi bi-trash me-1"></i>
+                        Удалить
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
 </div>
 
 {% endblock %}

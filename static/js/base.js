@@ -302,4 +302,38 @@ document.addEventListener("DOMContentLoaded", function () {
         updateExpulsionReasonVisibility();
     }
 
+    const deleteContactModal =
+        document.getElementById(
+            "deleteContactModal"
+        );
+
+    if (deleteContactModal) {
+
+        const deleteContactForm =
+            document.getElementById(
+                "deleteContactForm"
+            );
+
+        const deleteContactName =
+            document.getElementById(
+                "deleteContactName"
+            );
+
+        deleteContactModal.addEventListener(
+            "show.bs.modal",
+            function (event) {
+
+                const button = event.relatedTarget;
+
+                deleteContactName.textContent =
+                    button.dataset.contactName;
+
+                deleteContactForm.action =
+                    button.dataset.deleteUrl;
+
+            }
+        );
+
+    }
+
 });

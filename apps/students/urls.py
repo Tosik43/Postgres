@@ -70,4 +70,14 @@ urlpatterns = [
         contact_person.contact_person_create,
         name="contact_person_create",
     ),
+    path(
+        "contact-person/<int:pk>/edit/",
+        contact_person.contact_person_edit,
+        name="contact_person_edit",
+    ),
+    path(
+        "contact-person/<int:pk>/delete/",
+        contact_person.contact_person_delete,
+        name="contact_person_delete",
+    ),
 ]

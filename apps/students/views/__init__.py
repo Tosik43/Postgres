@@ -17,5 +17,7 @@ from .education_history import (
 )
 
 from .contact_person import (
-    contact_person_create
+    contact_person_create,
+    contact_person_edit,
+    contact_person_delete
 )
