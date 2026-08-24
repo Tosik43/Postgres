@@ -31,7 +31,7 @@ class EducationHistoryForm(forms.ModelForm):
             "academic_year": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "2021/2022",
+                    "placeholder": "Например: 2021/2022",
                     "maxlength": 9,
                 }
             ),
