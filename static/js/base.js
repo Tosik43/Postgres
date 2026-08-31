@@ -8,6 +8,14 @@ document.addEventListener("DOMContentLoaded", function () {
         new bootstrap.Tooltip(element);
     });
 
+    document
+    .querySelectorAll('[data-bs-tooltip]')
+    .forEach(function (element) {
+        new bootstrap.Tooltip(element, {
+            title: element.dataset.bsTooltip
+        });
+    });
+
 
     const educationalProgramSelect =
         document.querySelector(".searchable-program");
