@@ -1,0 +1,7 @@
+{
+    "name": "Django PostgreSQL Development",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "web",
+    "workspaceFolder": "/workspace",
+    "shutdownAction": "stopCompose"
+}

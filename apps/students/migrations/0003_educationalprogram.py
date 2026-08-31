@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Образовательная программа',
                 'verbose_name_plural': 'Образовательные программы',
                 'ordering': ['code', 'name'],
-                'constraints': [models.UniqueConstraint(fields=('code', 'education_level'), name='unique_program_code_and_level')],
+                'constraints': [models.UniqueConstraint(fields=('code', 'education_level'), name='students_unique_program_code_level')],
             },
         ),
     ]
