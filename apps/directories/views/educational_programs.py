@@ -2,11 +2,14 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.db.models import Q
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 from ..models import EducationalProgram
 from ..forms import EducationalProgramForm
 
 def educational_program_list(request):
+
     query = request.GET.get("q", "").strip()
     education_level = request.GET.get("education_level", "")
     sort = request.GET.get("sort", "")
@@ -39,26 +42,72 @@ def educational_program_list(request):
     sort_field = allowed_sort_fields.get(sort)
 
     if sort_field:
-        if direction == "desc":
-            programs = programs.order_by(f"-{sort_field}")
-        else:
-            programs = programs.order_by(sort_field)
-    else:
-        programs = programs.order_by("code", "name")
 
+        if direction == "desc":
+
+            programs = programs.order_by(
+                f"-{sort_field}"
+            )
+
+        else:
+
+            programs = programs.order_by(
+                sort_field
+            )
+
+    else:
+
+        programs = programs.order_by(
+            "code",
+            "name"
+        )
+
+    context = {
+        "programs": programs,
+        "query": query,
+        "education_level": education_level,
+        "education_level_choices": (
+            EducationalProgram.EducationLevel.choices
+        ),
+        "sort": sort,
+        "direction": direction,
+    }
+
+    # AJAX-запрос
+    if request.headers.get(
+        "X-Requested-With"
+    ) == "XMLHttpRequest":
+
+        tbody = render_to_string(
+            "directories/educational_programs/partials/program_table_body.html",
+            {
+                "programs": programs,
+            },
+            request=request,
+        )
+
+        thead = render_to_string(
+            "directories/educational_programs/program_table_head.html",
+            {
+                "query": query,
+                "education_level": education_level,
+                "sort": sort,
+                "direction": direction,
+            },
+            request=request,
+        )
+
+        return JsonResponse({
+            "tbody": tbody,
+            "thead": thead,
+            "url": request.get_full_path(),
+        })
+
+    # Обычный запрос
     return render(
         request,
         "directories/educational_programs/list.html",
-        {
-            "programs": programs,
-            "query": query,
-            "education_level": education_level,
-            "education_level_choices": (
-                EducationalProgram.EducationLevel.choices
-            ),
-            "sort": sort,
-            "direction": direction,
-        }
+        context
     )
 
 def educational_program_create(request):

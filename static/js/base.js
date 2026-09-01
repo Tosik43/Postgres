@@ -344,4 +344,298 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    const programSearchForm =
+        document.getElementById("programSearchForm");
+
+    if (programSearchForm) {
+
+        const searchInput =
+            document.getElementById("search");
+
+        const educationLevel =
+            document.getElementById("education_level");
+
+        let searchTimeout;
+
+
+        function loadPrograms(params, updateUrl = true) {
+
+            fetch(
+                `${window.location.pathname}?${params.toString()}`,
+                {
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }
+            )
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error(
+                        `HTTP error: ${response.status}`
+                    );
+                }
+
+                return response.json();
+
+            })
+            .then(data => {
+
+                const tableHead =
+                    document.getElementById(
+                        "program-table-head"
+                    );
+
+                const tableBody =
+                    document.getElementById(
+                        "programTableBody"
+                    );
+
+
+                if (tableHead && data.thead) {
+
+                    tableHead.innerHTML =
+                        data.thead;
+
+                }
+
+
+                if (tableBody && data.tbody) {
+
+                    tableBody.innerHTML =
+                        data.tbody;
+
+                }
+
+
+                if (updateUrl) {
+
+                    window.history.replaceState(
+                        {},
+                        "",
+                        data.url
+                    );
+
+                }
+
+
+                initProgramAjaxSort();
+
+            })
+            .catch(error => {
+
+                console.error(
+                    "Ошибка загрузки образовательных программ:",
+                    error
+                );
+
+            });
+
+        }
+
+
+        function performProgramSearch() {
+
+            const params =
+                new URLSearchParams(
+                    new FormData(programSearchForm)
+                );
+
+
+            const currentUrl =
+                new URL(window.location.href);
+
+
+            const currentSort =
+                currentUrl.searchParams.get("sort");
+
+            const currentDirection =
+                currentUrl.searchParams.get("direction");
+
+
+            if (currentSort) {
+
+                params.set(
+                    "sort",
+                    currentSort
+                );
+
+            }
+
+
+            if (currentDirection) {
+
+                params.set(
+                    "direction",
+                    currentDirection
+                );
+
+            }
+
+
+            loadPrograms(params);
+
+        }
+
+
+        if (searchInput) {
+
+            searchInput.addEventListener(
+                "input",
+                function () {
+
+                    clearTimeout(
+                        searchTimeout
+                    );
+
+                    searchTimeout =
+                        setTimeout(
+                            performProgramSearch,
+                            100
+                        );
+
+                }
+            );
+
+        }
+
+
+        if (educationLevel) {
+
+            educationLevel.addEventListener(
+                "change",
+                function () {
+
+                    performProgramSearch();
+
+                }
+            );
+
+        }
+
+
+        programSearchForm.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+                performProgramSearch();
+
+            }
+        );
+
+
+        function initProgramAjaxSort() {
+
+            document
+                .querySelectorAll(
+                    ".ajax-program-sort"
+                )
+                .forEach(link => {
+
+                    if (
+                        link.dataset.ajaxSortInitialized
+                    ) {
+                        return;
+                    }
+
+
+                    link.dataset.ajaxSortInitialized =
+                        "true";
+
+
+                    link.addEventListener(
+                        "click",
+                        function (event) {
+
+                            event.preventDefault();
+
+
+                            fetch(
+                                this.href,
+                                {
+                                    headers: {
+                                        "X-Requested-With":
+                                            "XMLHttpRequest"
+                                    }
+                                }
+                            )
+                            .then(response => {
+
+                                if (!response.ok) {
+                                    throw new Error(
+                                        `HTTP error: ${response.status}`
+                                    );
+                                }
+
+                                return response.json();
+
+                            })
+                            .then(data => {
+
+                                const tableHead =
+                                    document.getElementById(
+                                        "program-table-head"
+                                    );
+
+                                const tableBody =
+                                    document.getElementById(
+                                        "programTableBody"
+                                    );
+
+
+                                if (
+                                    tableHead &&
+                                    data.thead
+                                ) {
+
+                                    tableHead.innerHTML =
+                                        data.thead;
+
+                                }
+
+
+                                if (
+                                    tableBody &&
+                                    data.tbody
+                                ) {
+
+                                    tableBody.innerHTML =
+                                        data.tbody;
+
+                                }
+
+
+                                window.history.pushState(
+                                    {},
+                                    "",
+                                    data.url
+                                );
+
+
+                                initProgramAjaxSort();
+
+                            })
+                            .catch(error => {
+
+                                console.error(
+                                    "Ошибка сортировки образовательных программ:",
+                                    error
+                                );
+
+                            });
+
+                        }
+                    );
+
+                });
+
+        }
+
+
+        initProgramAjaxSort();
+
+    }
+
 });

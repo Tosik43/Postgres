@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<form method="get" class="row g-2 mb-4 align-items-end" id="searchForm">
+<form method="get" class="row g-2 mb-4 align-items-end" id="programSearchForm">
     <div class="col-md-6">
         <label for="search" class="form-label">Поиск</label>
         <input type="text" id="search" name="q" value="{{ query }}" class="form-control" placeholder="Код или название программы">
@@ -42,61 +42,20 @@
 
 <div class="table-responsive">
     <table class="table table-bordered table-hover align-middle">
-        <thead class="table-primary text-center">
-            <tr>
-                <th style="width: 15%;">
-                    <a class="text-decoration-none text-dark" href="?{{ query_params }}&sort=code&direction={% if sort == 'code' and direction == 'asc' %}desc{% else %}asc{% endif %}">
-                        Код
-                        {% if sort == "code" %}
-                            {% if direction == "asc" %}▲{% else %}▼{% endif %}
-                        {% else %}↕{% endif %}
-                    </a>
-                </th>
-                <th style="width: 40%;">
-                    <a class="text-decoration-none text-dark" href="?{{ query_params }}&sort=name&direction={% if sort == 'name' and direction == 'asc' %}desc{% else %}asc{% endif %}">
-                        Название
-                        {% if sort == "name" %}
-                            {% if direction == "asc" %}▲{% else %}▼{% endif %}
-                        {% else %}↕{% endif %}
-                    </a>
-                </th>
-                <th style="width: 25%;">
-                    <a class="text-decoration-none text-dark" href="?{{ query_params }}&sort=education_level&direction={% if sort == 'education_level' and direction == 'asc' %}desc{% else %}asc{% endif %}">
-                        Уровень образования
-                        {% if sort == "education_level" %}
-                            {% if direction == "asc" %}▲{% else %}▼{% endif %}
-                        {% else %}↕{% endif %}
-                    </a>
-                </th>
-                <th style="width: 20%; min-width: 150px;">Действия</th>
-            </tr>
+
+        <thead
+            id="program-table-head"
+            class="table-primary text-center"
+        >
+            {% include "directories/educational_programs/program_table_head.html" %}
         </thead>
-        <tbody>
-            {% for program in programs %}
-                <tr>
-                    <td class="text-center"><strong>{{ program.code }}</strong></td>
-                    <td>{{ program.name }}</td>
-                    <td>{{ program.get_education_level_display }}</td>
-                    <td class="text-nowrap">
-                        <a href="{% url 'educational_program_edit' program.pk %}" class="btn btn-warning btn-sm text-nowrap">
-                            Изменить
-                        </a>
-                        <button class="btn btn-danger btn-sm text-nowrap"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deleteEducationalProgramModal"
-                                data-id="{{ program.id }}"
-                                data-name="{{ program.code }} - {{ program.name }}"
-                                data-url="{% url 'educational_program_delete' program.id %}">
-                            Удалить
-                        </button>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4" class="text-center">Образовательные программы не найдены</td>
-                </tr>
-            {% endfor %}
+
+        <tbody id="programTableBody">
+
+            {% include "directories/educational_programs/partials/program_table_body.html" %}
+
         </tbody>
+
     </table>
 </div>
 

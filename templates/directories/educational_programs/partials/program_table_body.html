@@ -1,0 +1,54 @@
+{% for program in programs %}
+
+    <tr>
+
+        <td class="text-center">
+            <strong>{{ program.code }}</strong>
+        </td>
+
+        <td>
+            {{ program.name }}
+        </td>
+
+        <td>
+            {{ program.get_education_level_display }}
+        </td>
+
+        <td class="text-nowrap">
+
+            <a
+                href="{% url 'educational_program_edit' program.pk %}"
+                class="btn btn-warning btn-sm text-nowrap"
+            >
+                Изменить
+            </a>
+
+            <button
+                class="btn btn-danger btn-sm text-nowrap"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteEducationalProgramModal"
+                data-id="{{ program.id }}"
+                data-name="{{ program.code }} - {{ program.name }}"
+                data-url="{% url 'educational_program_delete' program.id %}"
+            >
+                Удалить
+            </button>
+
+        </td>
+
+    </tr>
+
+{% empty %}
+
+    <tr>
+
+        <td
+            colspan="4"
+            class="text-center"
+        >
+            Образовательные программы не найдены
+        </td>
+
+    </tr>
+
+{% endfor %}
