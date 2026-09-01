@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if practice %}
+        Редактирование практики
+    {% else %}
+        Добавление практики
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="mb-1">
+
+            {% if practice %}
+                Редактирование практики
+            {% else %}
+                Добавление практики
+            {% endif %}
+
+        </h2>
+
+        <div class="text-muted">
+            Студент:
+            <strong>{{ student.full_name }}</strong>
+        </div>
+
+    </div>
+
+
+    <a
+        href="{% url 'student_detail' student.pk %}?tab=practice"
+        class="btn btn-secondary"
+    >
+        ← Назад
+    </a>
+
+</div>
+
+
+<form method="post">
+
+    {% csrf_token %}
+
+
+    {% if form.non_field_errors %}
+
+        <div class="alert alert-danger">
+
+            {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- Место практики -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <strong>Место практики</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <!-- Организация -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="{{ form.organization.id_for_label }}"
+                        class="form-label"
+                    >
+                        Организация
+                    </label>
+
+                    {{ form.organization }}
+
+                    {% for error in form.organization.errors %}
+
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Руководитель -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="{{ form.supervisor.id_for_label }}"
+                        class="form-label"
+                    >
+                        Руководитель
+                    </label>
+
+                    {{ form.supervisor }}
+
+                    {% for error in form.supervisor.errors %}
+
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Параметры практики -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <strong>Параметры практики</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <!-- Вид практики -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="{{ form.practice_type.id_for_label }}"
+                        class="form-label"
+                    >
+                        Вид практики
+                    </label>
+
+                    {{ form.practice_type }}
+
+                    {% for error in form.practice_type.errors %}
+
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Семестр -->
+
+                <div class="col-md-3">
+
+                    <label
+                        for="{{ form.semester.id_for_label }}"
+                        class="form-label"
+                    >
+                        Семестр
+                    </label>
+
+                    {{ form.semester }}
+
+                    {% for error in form.semester.errors %}
+
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Оплата -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Оплата
+                    </label>
+
+                    <div class="form-check mt-2">
+
+                        {{ form.is_paid }}
+
+                        <label
+                            class="form-check-label"
+                            for="{{ form.is_paid.id_for_label }}"
+                        >
+                            Практика оплачивается
+                        </label>
+
+                    </div>
+
+                    {% for error in form.is_paid.errors %}
+
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Организация практики -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <strong>Организация практики</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <!-- Кто направил -->
+
+                <div class="col-md-6">
+
+                    <label
+                        for="{{ form.referral_source.id_for_label }}"
+                        class="form-label"
+                    >
+                        Кто направил
+                    </label>
+
+                    {{ form.referral_source }}
+
+                    {% for error in form.referral_source.errors %}
+
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Кнопки -->
+
+    <div class="d-flex justify-content-end gap-2">
+
+        <a
+            href="{% url 'student_detail' student.pk %}?tab=practice"
+            class="btn btn-secondary"
+        >
+            Отмена
+        </a>
+
+        <button
+            type="submit"
+            class="btn btn-success"
+        >
+
+            {% if practice %}
+                Сохранить изменения
+            {% else %}
+                Добавить практику
+            {% endif %}
+
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

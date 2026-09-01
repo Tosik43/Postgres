@@ -1,8 +1,6 @@
 from django.urls import path
 
-from .views import students
-from .views import education_history
-from .views import contact_person
+from .views import students, education_history, contact_person, practice
 
 urlpatterns = [
     path(
@@ -79,5 +77,20 @@ urlpatterns = [
         "contact-person/<int:pk>/delete/",
         contact_person.contact_person_delete,
         name="contact_person_delete",
+    ),
+    path(
+        "<int:student_pk>/practice/add/",
+        practice.practice_create,
+        name="practice_create",
+    ),
+    path(
+        "practice/<int:pk>/edit/",
+        practice.practice_edit,
+        name="practice_edit",
+    ),
+    path(
+        "practice/<int:pk>/delete/",
+        practice.practice_delete,
+        name="practice_delete",
     ),
 ]

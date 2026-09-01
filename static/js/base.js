@@ -922,6 +922,65 @@ document.addEventListener("DOMContentLoaded", function () {
 
             }
 
+        }
+    
+    const deletePracticeModal =
+        document.getElementById(
+            "deletePracticeModal"
+        );
+
+    if (deletePracticeModal) {
+
+        deletePracticeModal.addEventListener(
+            "show.bs.modal",
+            function (event) {
+
+                const button =
+                    event.relatedTarget;
+
+                if (!button) {
+                    return;
+                }
+
+                const name =
+                    button.getAttribute(
+                        "data-name"
+                    );
+
+                const url =
+                    button.getAttribute(
+                        "data-url"
+                    );
+
+
+                const practiceName =
+                    document.getElementById(
+                        "practiceName"
+                    );
+
+                const deleteForm =
+                    document.getElementById(
+                        "deletePracticeForm"
+                    );
+
+
+                if (practiceName) {
+
+                    practiceName.textContent =
+                        name || "";
+
+                }
+
+                if (deleteForm) {
+
+                    deleteForm.action =
+                        url || "";
+
+                }
+
+            }
+        );
+
     }
 
 });

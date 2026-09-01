@@ -252,6 +252,8 @@ def student_detail(request, pk):
         pk=pk
     )
 
+    active_tab = request.GET.get("tab", "contacts")
+
     current_education = (
         student.education_history
         .select_related(
@@ -289,6 +291,7 @@ def student_detail(request, pk):
             "current_education": current_education,
             "first_education": first_education,
             "last_finished_education": last_finished_education,
+            "active_tab": active_tab,
         }
     )
 

@@ -9,3 +9,4 @@ from .education_history import (
 )
 
 from .contact_person import ContactPerson
+from .practice import Practice
