@@ -1,0 +1,51 @@
+{% for disorder in disorders %}
+
+    <tr>
+
+        <td>
+            <strong>{{ disorder.name }}</strong>
+        </td>
+
+        <td>
+            {{ disorder.health_features|default:"—" }}
+        </td>
+
+        <td class="text-nowrap">
+
+            <a
+                href="{% url 'health_disorder_edit' disorder.pk %}"
+                class="btn btn-warning btn-sm text-nowrap"
+            >
+                Изменить
+            </a>
+
+
+            <button
+                class="btn btn-danger btn-sm text-nowrap"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteHealthDisorderModal"
+                data-id="{{ disorder.id }}"
+                data-name="{{ disorder.name }}"
+                data-url="{% url 'health_disorder_delete' disorder.id %}"
+            >
+                Удалить
+            </button>
+
+        </td>
+
+    </tr>
+
+{% empty %}
+
+    <tr>
+
+        <td
+            colspan="3"
+            class="text-center"
+        >
+            Виды нарушений здоровья не найдены
+        </td>
+
+    </tr>
+
+{% endfor %}

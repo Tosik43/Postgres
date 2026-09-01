@@ -638,4 +638,290 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    const healthDisorderSearchForm =
+        document.getElementById("healthDisorderSearchForm");
+
+    if (healthDisorderSearchForm) {
+
+        const searchInput =
+            document.getElementById("healthDisorderSearch");
+
+        let searchTimeout;
+
+
+        function performHealthDisorderSearch() {
+
+            const params = new URLSearchParams(
+                new FormData(healthDisorderSearchForm)
+            );
+
+            const currentUrl =
+                new URL(window.location.href);
+
+            const currentSort =
+                currentUrl.searchParams.get("sort");
+
+            const currentDirection =
+                currentUrl.searchParams.get("direction");
+
+
+            if (currentSort) {
+                params.set("sort", currentSort);
+            }
+
+            if (currentDirection) {
+                params.set("direction", currentDirection);
+            }
+
+
+            fetch(
+                `${window.location.pathname}?${params.toString()}`,
+                {
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }
+            )
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error(
+                        `HTTP error: ${response.status}`
+                    );
+                }
+
+                return response.json();
+
+            })
+            .then(data => {
+
+                const tableBody =
+                    document.getElementById(
+                        "healthDisorderTableBody"
+                    );
+
+                const tableHead =
+                    document.getElementById(
+                        "health-disorder-table-head"
+                    );
+
+
+                if (tableBody) {
+                    tableBody.innerHTML = data.tbody;
+                }
+
+                if (tableHead) {
+                    tableHead.innerHTML = data.thead;
+                }
+
+
+                window.history.replaceState(
+                    {},
+                    "",
+                    data.url
+                );
+
+
+                initHealthDisorderAjaxSort();
+
+            })
+            .catch(error => {
+
+                console.error(
+                    "Ошибка фильтрации видов нарушений здоровья:",
+                    error
+                );
+
+            });
+
+        }
+
+
+        if (searchInput) {
+
+            searchInput.addEventListener(
+                "input",
+                function () {
+
+                    clearTimeout(searchTimeout);
+
+                    searchTimeout = setTimeout(
+                        performHealthDisorderSearch,
+                        100
+                    );
+
+                }
+            );
+
+        }
+
+
+        healthDisorderSearchForm.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+                performHealthDisorderSearch();
+
+            }
+        );
+
+
+        function initHealthDisorderAjaxSort() {
+
+            document
+                .querySelectorAll(
+                    ".ajax-health-disorder-sort"
+                )
+                .forEach(link => {
+
+                    if (link.dataset.ajaxSortInitialized) {
+                        return;
+                    }
+
+                    link.dataset.ajaxSortInitialized = "true";
+
+
+                    link.addEventListener(
+                        "click",
+                        function (event) {
+
+                            event.preventDefault();
+
+
+                            fetch(
+                                this.href,
+                                {
+                                    headers: {
+                                        "X-Requested-With":
+                                            "XMLHttpRequest"
+                                    }
+                                }
+                            )
+                            .then(response => {
+
+                                if (!response.ok) {
+                                    throw new Error(
+                                        `HTTP error: ${response.status}`
+                                    );
+                                }
+
+                                return response.json();
+
+                            })
+                            .then(data => {
+
+                                const tableBody =
+                                    document.getElementById(
+                                        "healthDisorderTableBody"
+                                    );
+
+                                const tableHead =
+                                    document.getElementById(
+                                        "health-disorder-table-head"
+                                    );
+
+
+                                if (tableBody) {
+                                    tableBody.innerHTML =
+                                        data.tbody;
+                                }
+
+                                if (tableHead) {
+                                    tableHead.innerHTML =
+                                        data.thead;
+                                }
+
+
+                                window.history.pushState(
+                                    {},
+                                    "",
+                                    data.url
+                                );
+
+
+                                initHealthDisorderAjaxSort();
+
+                            })
+                            .catch(error => {
+
+                                console.error(
+                                    "Ошибка сортировки видов нарушений здоровья:",
+                                    error
+                                );
+
+                            });
+
+                        }
+                    );
+
+                });
+
+        }
+
+
+        initHealthDisorderAjaxSort();
+
+            const deleteHealthDisorderModal =
+                document.getElementById(
+                    "deleteHealthDisorderModal"
+                );
+
+            if (deleteHealthDisorderModal) {
+
+                deleteHealthDisorderModal.addEventListener(
+                    "show.bs.modal",
+                    function (event) {
+
+                        const button =
+                            event.relatedTarget;
+
+                        if (!button) {
+                            return;
+                        }
+
+                        const name =
+                            button.getAttribute(
+                                "data-name"
+                            );
+
+                        const url =
+                            button.getAttribute(
+                                "data-url"
+                            );
+
+
+                        const disorderName =
+                            document.getElementById(
+                                "healthDisorderName"
+                            );
+
+                        const deleteForm =
+                            document.getElementById(
+                                "deleteHealthDisorderForm"
+                            );
+
+
+                        if (disorderName) {
+
+                            disorderName.textContent =
+                                name || "";
+
+                        }
+
+                        if (deleteForm) {
+
+                            deleteForm.action =
+                                url || "";
+
+                        }
+
+                    }
+                );
+
+            }
+
+    }
+
 });

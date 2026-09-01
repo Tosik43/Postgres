@@ -40,7 +40,7 @@
                     Студенты
                 </a>
 
-                <a class="nav-link text-white {% if request.resolver_match.url_name in 'reference_list faculty_list faculty_create faculty_edit faculty_delete faculty_archive faculty_restore faculty_delete_forever educational_program_list educational_program_create educational_program_edit educational_program_delete educational_program_archive educational_program_restore educational_program_delete_forever' %}fw-bold{% endif %}"
+                <a class="nav-link text-white {% if request.resolver_match.url_name in 'reference_list faculty_list faculty_create faculty_edit faculty_delete faculty_archive faculty_restore faculty_delete_forever educational_program_list educational_program_create educational_program_edit educational_program_delete educational_program_archive educational_program_restore educational_program_delete_forever health_disorder_list health_disorder_create health_disorder_edit health_disorder_delete health_disorder_archive health_disorder_restore health_disorder_delete_forever' %}fw-bold{% endif %}"
                 href="{% url 'reference_list' %}">
                     Справочники
                 </a>

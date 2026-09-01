@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}
+Архив видов нарушений здоровья
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="mb-0">
+        Архив видов нарушений здоровья
+    </h2>
+
+    <a
+        href="{% url 'health_disorder_list' %}"
+        class="btn btn-secondary text-nowrap"
+    >
+        ← Назад
+    </a>
+
+</div>
+
+
+<div class="table-responsive">
+
+    <table class="table table-bordered table-hover align-middle">
+
+        <thead class="table-primary text-center">
+
+            <tr>
+
+                <th style="width: 25%;">
+                    Нарушение
+                </th>
+
+                <th style="width: 30%;">
+                    Особенности здоровья
+                </th>
+
+                <th style="width: 20%;">
+                    Дата удаления
+                </th>
+
+                <th style="width: 25%; min-width: 200px;">
+                    Действия
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for disorder in disorders %}
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ disorder.name }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ disorder.health_features|default:"—" }}
+                    </td>
+
+                    <td>
+                        {{ disorder.deleted_at|date:"d.m.Y H:i" }}
+                    </td>
+
+                    <td>
+
+                        <div class="d-flex gap-2 justify-content-center">
+
+                            <form
+                                method="post"
+                                action="{% url 'health_disorder_restore' disorder.id %}"
+                                class="d-inline"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-success btn-sm text-nowrap"
+                                >
+                                    Восстановить
+                                </button>
+
+                            </form>
+
+
+                            <button
+                                type="button"
+                                class="btn btn-danger btn-sm text-nowrap"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteHealthDisorderForeverModal"
+                                data-name="{{ disorder.name }}"
+                                data-url="{% url 'health_disorder_delete_forever' disorder.id %}"
+                            >
+                                Удалить навсегда
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="text-center"
+                    >
+                        Архив видов нарушений здоровья пуст
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- Модальное окно окончательного удаления -->
+
+<div
+    class="modal fade"
+    id="deleteHealthDisorderForeverModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+
+                <h5 class="modal-title">
+                    Окончательное удаление
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                Вы действительно хотите окончательно удалить вид нарушения здоровья:
+
+                <strong id="deleteHealthDisorderForeverName"></strong>?
+
+                <br><br>
+
+                <small class="text-danger">
+
+                    Внимание! Вид нарушения здоровья будет полностью
+                    удалён из базы данных. Восстановить его будет невозможно.
+
+                </small>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Отмена
+                </button>
+
+
+                <form
+                    id="deleteHealthDisorderForeverForm"
+                    method="post"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                    >
+                        Удалить навсегда
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

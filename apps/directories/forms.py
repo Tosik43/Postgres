@@ -1,5 +1,5 @@
 from django import forms
-from .models import Faculty, EducationalProgram
+from .models import Faculty, EducationalProgram, HealthDisorder
 
 
 class FacultyForm(forms.ModelForm):
@@ -93,3 +93,61 @@ class EducationalProgramForm(forms.ModelForm):
                 field.widget.attrs["class"] = f"{css_class} is-invalid"
             else:
                 field.widget.attrs["class"] = css_class
+
+class HealthDisorderForm(forms.ModelForm):
+
+    class Meta:
+        model = HealthDisorder
+
+        fields = [
+            "name",
+            "health_features",
+        ]
+
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Например, нарушение слуха",
+                }
+            ),
+
+            "health_features": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Опишите особенности здоровья",
+                    "rows": 4,
+                }
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+
+            css_class = field.widget.attrs.get(
+                "class",
+                "form-control"
+            )
+
+            if (
+                self.is_bound
+                and field_name in self.errors
+            ):
+                field.widget.attrs["class"] = (
+                    f"{css_class} is-invalid"
+                )
+            else:
+                field.widget.attrs["class"] = css_class
+
+    def clean_name(self):
+        name = self.cleaned_data.get("name")
+
+        if name:
+            if len(name) > 255:
+                raise forms.ValidationError(
+                    "Название нарушения не может быть длиннее 255 символов."
+                )
+
+        return name

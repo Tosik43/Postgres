@@ -177,3 +177,75 @@ class EducationalProgram(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean() 
         super().save(*args, **kwargs)
+
+class HealthDisorder(models.Model):
+
+    name = models.CharField(
+        "Нарушение",
+        max_length=255,
+        unique=True
+    )
+
+    health_features = models.TextField(
+        "Особенности здоровья",
+        blank=True
+    )
+
+    is_active = models.BooleanField(
+        "Активен",
+        default=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    deleted_at = models.DateTimeField(
+        "Дата удаления",
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = "Вид нарушения здоровья"
+        verbose_name_plural = "Виды нарушений здоровья"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        super().clean()
+
+        self.name = " ".join(
+            self.name.split()
+        )
+
+        self.health_features = " ".join(
+            self.health_features.split()
+        )
+
+        if len(self.name) < 3:
+            raise ValidationError({
+                "name":
+                    "Название нарушения должно содержать минимум 3 символа."
+            })
+
+        if HealthDisorder.objects.filter(
+            name=self.name
+        ).exclude(
+            pk=self.pk
+        ).exists():
+
+            raise ValidationError({
+                "name":
+                    f"Вид нарушения '{self.name}' уже существует."
+            })
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)

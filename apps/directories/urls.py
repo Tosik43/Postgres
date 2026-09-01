@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import faculties, educational_programs, references
+from .views import faculties, educational_programs, references, health_disorders
 
 urlpatterns = [
 
@@ -79,5 +79,40 @@ urlpatterns = [
         "educational-programs/<int:pk>/delete-forever/",
         educational_programs.educational_program_delete_forever,
         name="educational_program_delete_forever",
+    ),
+    path(
+        "health-disorders/",
+        health_disorders.health_disorder_list,
+        name="health_disorder_list",
+    ),
+    path(
+        "health-disorders/add/",
+        health_disorders.health_disorder_create,
+        name="health_disorder_create",
+    ),
+    path(
+        "health-disorders/<int:pk>/edit/",
+        health_disorders.health_disorder_edit,
+        name="health_disorder_edit",
+    ),
+    path(
+        "health-disorders/<int:pk>/delete/",
+        health_disorders.health_disorder_delete,
+        name="health_disorder_delete",
+    ),
+    path(
+        "health-disorders/archive/",
+        health_disorders.health_disorder_archive,
+        name="health_disorder_archive",
+    ),
+    path(
+        "health-disorders/<int:pk>/restore/",
+        health_disorders.health_disorder_restore,
+        name="health_disorder_restore",
+    ),
+    path(
+        "health-disorders/<int:pk>/delete-forever/",
+        health_disorders.health_disorder_delete_forever,
+        name="health_disorder_delete_forever",
     ),
 ]

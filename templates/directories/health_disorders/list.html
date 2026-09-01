@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Виды нарушений здоровья
+
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="mb-0">Виды нарушений здоровья</h2>
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="{% url 'health_disorder_create' %}"
+            class="btn btn-success text-nowrap"
+        >
+            + Добавить нарушение
+        </a>
+
+        <a
+            href="{% url 'health_disorder_archive' %}"
+            class="btn btn-outline-primary text-nowrap"
+        >
+            Архив
+        </a>
+
+    </div>
+
+</div>
+
+
+<form
+    method="get"
+    class="row g-2 mb-4 align-items-end"
+    id="healthDisorderSearchForm"
+>
+
+    <div class="col-md-10">
+
+        <label
+            for="healthDisorderSearch"
+            class="form-label"
+        >
+            Поиск
+        </label>
+
+        <input
+            type="text"
+            id="healthDisorderSearch"
+            name="q"
+            value="{{ query }}"
+            class="form-control"
+            placeholder="Название нарушения или особенности здоровья"
+        >
+
+    </div>
+
+
+    <div class="col-md-2 d-flex align-items-end gap-2">
+
+        <a
+            href="{% url 'health_disorder_list' %}"
+            class="btn btn-secondary flex-fill text-nowrap"
+        >
+            Сброс
+        </a>
+
+    </div>
+
+</form>
+
+
+<div class="table-responsive">
+
+    <table class="table table-bordered table-hover align-middle">
+
+        <thead
+            id="health-disorder-table-head"
+            class="table-primary text-center"
+        >
+
+            {% include "directories/health_disorders/health_disorder_table_head.html" %}
+
+        </thead>
+
+
+        <tbody id="healthDisorderTableBody">
+
+            {% include "directories/health_disorders/partials/health_disorder_table_body.html" %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<div
+    class="modal fade"
+    id="deleteHealthDisorderModal"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+
+                <h5 class="modal-title">
+                    Удаление вида нарушения здоровья
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Закрыть"
+                ></button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                Вы действительно хотите удалить вид нарушения
+
+                <strong id="healthDisorderName"></strong>?
+
+                <br>
+                <br>
+
+                <small class="text-danger">
+
+                    Вид нарушения не удаляется из базы данных.
+                    Он просто перестанет отображаться в списке.
+
+                </small>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Отмена
+                </button>
+
+
+                <form
+                    id="deleteHealthDisorderForm"
+                    method="post"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                    >
+                        Удалить
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
