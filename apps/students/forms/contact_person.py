@@ -12,6 +12,7 @@ class ContactPersonForm(forms.ModelForm):
             "full_name",
             "relationship",
             "phone",
+            "email"
         ]
 
         widgets = {
@@ -33,6 +34,13 @@ class ContactPersonForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "+7 (___) ___-__-__",
+                }
+            ),
+
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "example@mail.ru",
                 }
             ),
         }

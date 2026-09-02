@@ -28,6 +28,11 @@ class ContactPerson(models.Model):
         validators=[validate_phone]
     )
 
+    email = models.EmailField(
+        "Email",
+        blank=True
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )
