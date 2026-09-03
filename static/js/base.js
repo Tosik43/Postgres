@@ -983,4 +983,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    const deleteContactPersonModal =
+        document.getElementById(
+            "deleteContactPersonModal"
+        );
+
+    if (deleteContactPersonModal) {
+        deleteContactPersonModal.addEventListener(
+            "show.bs.modal",
+            function (event) {
+
+                const button = event.relatedTarget;
+
+                if (!button) {
+                    return;
+                }
+
+                const name =
+                    button.getAttribute("data-name");
+
+                const url =
+                    button.getAttribute("data-url");
+
+                const contactPersonName =
+                    document.getElementById(
+                        "contactPersonName"
+                    );
+
+                const deleteForm =
+                    document.getElementById(
+                        "deleteContactPersonForm"
+                    );
+
+                if (contactPersonName) {
+                    contactPersonName.textContent =
+                        name || "";
+                }
+
+                if (deleteForm) {
+                    deleteForm.action =
+                        url || "";
+                }
+            }
+        );
+    }
+
 });
