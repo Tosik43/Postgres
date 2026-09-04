@@ -1028,4 +1028,58 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
+    const educationHistoryForm =
+        document.querySelector("form[data-program-levels]");
+
+    if (educationHistoryForm) {
+
+        const programLevels = JSON.parse(
+            educationHistoryForm.dataset.programLevels
+        );
+
+        const educationalProgramField =
+            document.getElementById("id_educational_program");
+
+        const plannedGraduationDateBlock =
+            document.getElementById("planned-graduation-date-block");
+
+        function updatePlannedGraduationDateVisibility() {
+
+            if (
+                !educationalProgramField ||
+                !plannedGraduationDateBlock
+            ) {
+                return;
+            }
+
+            const programId =
+                educationalProgramField.value;
+
+            if (!programId) {
+                plannedGraduationDateBlock.style.display = "none";
+                return;
+            }
+
+            const programData = programLevels[programId];
+
+            if (!programData) {
+                plannedGraduationDateBlock.style.display = "none";
+                return;
+            }
+
+            if (programData.has_planned_date) {
+                plannedGraduationDateBlock.style.display = "none";
+            } else {
+                plannedGraduationDateBlock.style.display = "";
+            }
+        }
+
+        educationalProgramField.addEventListener(
+            "change",
+            updatePlannedGraduationDateVisibility
+        );
+
+        updatePlannedGraduationDateVisibility();
+    }
+
 });

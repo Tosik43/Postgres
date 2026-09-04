@@ -83,6 +83,17 @@
                 </td>
             </tr>
 
+            <tr>
+                <th>Планируемая дата выпуска</th>
+                <td>
+                    {% if planned_graduation %}
+                        {{ planned_graduation.planned_graduation_date|date:"Y" }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+
             {% if current_education and current_education.status == "expelled" %}
 
             <tr>

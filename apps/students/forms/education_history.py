@@ -22,6 +22,7 @@ class EducationHistoryForm(forms.ModelForm):
             "status",
             "start_date",
             "end_date",
+            "planned_graduation_date",
             "change_reasons",
             "expulsion_reason",
         ]
@@ -111,6 +112,14 @@ class EducationHistoryForm(forms.ModelForm):
                 }
             ),
 
+            "planned_graduation_date": forms.DateInput(
+                format="%Y-%m-%d",
+                attrs={
+                    "class": "form-control",
+                    "type": "date",
+                }
+            ),
+
             "change_reasons": forms.CheckboxSelectMultiple(
                 attrs={
                     "class": "change-reasons-checkboxes",
@@ -125,7 +134,36 @@ class EducationHistoryForm(forms.ModelForm):
             ),
         }
 
+    def _get_education_level(self, educational_program):
+        if not educational_program:
+            return None
+
+        return educational_program.education_level
+
+    def _has_planned_graduation_date(self, educational_program):
+        if not self.student or not educational_program:
+            return False
+
+        education_level = self._get_education_level(
+            educational_program
+        )
+
+        return (
+            EducationHistory.objects
+            .filter(
+                student=self.student,
+                educational_program__education_level=education_level,
+                planned_graduation_date__isnull=False,
+            )
+            .exclude(
+                pk=self.instance.pk
+            )
+            .exists()
+        )
+
     def __init__(self, *args, **kwargs):
+
+        self.student = kwargs.pop("student", None)
 
         super().__init__(*args, **kwargs)
 
@@ -135,6 +173,10 @@ class EducationHistoryForm(forms.ModelForm):
         ]
 
         self.fields["end_date"].input_formats = [
+            "%Y-%m-%d"
+        ]
+
+        self.fields["planned_graduation_date"].input_formats = [
             "%Y-%m-%d"
         ]
 
@@ -155,6 +197,17 @@ class EducationHistoryForm(forms.ModelForm):
             .filter(is_active=True)
             .order_by("code", "name")
         )
+
+        for program in self.fields["educational_program"].queryset:
+            self.fields["educational_program"].widget.choices
+
+        # Планируемая дата выпуска указывается только один раз
+        # для каждого уровня образования.
+        if self.instance.pk and self.instance.educational_program:
+            if self._has_planned_graduation_date(
+                self.instance.educational_program
+            ):
+                self.fields.pop("planned_graduation_date")
 
         self.fields["faculty"].empty_label = (
             "Выберите факультет"

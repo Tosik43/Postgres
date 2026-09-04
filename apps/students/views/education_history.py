@@ -3,6 +3,7 @@ from django.shortcuts import (
     redirect,
     render,
 )
+import json
 
 from django.contrib import messages
 from django.core.exceptions import ValidationError
@@ -54,7 +55,8 @@ def education_history_create(request, student_pk):
     if request.method == "POST":
 
         form = EducationHistoryForm(
-            request.POST
+            request.POST,
+            student=student
         )
 
         form.instance.student = student
@@ -80,7 +82,21 @@ def education_history_create(request, student_pk):
 
     else:
 
-        form = EducationHistoryForm()
+        form = EducationHistoryForm(
+            student=student
+        )
+
+    program_levels = {}
+
+    for program in form.fields["educational_program"].queryset:
+        program_levels[program.pk] = {
+            "level": program.education_level,
+            "has_planned_date": form._has_planned_graduation_date(
+                program
+            ),
+        }
+
+    program_levels_json = json.dumps(program_levels)
 
     return render(
         request,
@@ -89,6 +105,8 @@ def education_history_create(request, student_pk):
             "form": form,
             "student": student,
             "history_record": None,
+            "program_levels": program_levels,
+            "program_levels_json": program_levels_json,
         }
     )
 
@@ -101,7 +119,8 @@ def education_history_edit(request, pk):
     if request.method == "POST":
         form = EducationHistoryForm(
             request.POST,
-            instance=history_record
+            instance=history_record,
+            student=history_record.student
         )
 
         if form.is_valid():
@@ -125,8 +144,21 @@ def education_history_edit(request, pk):
 
     else:
         form = EducationHistoryForm(
-            instance=history_record
+            instance=history_record,
+            student=history_record.student
         )
+
+    program_levels = {}
+
+    for program in form.fields["educational_program"].queryset:
+        program_levels[program.pk] = {
+            "level": program.education_level,
+            "has_planned_date": form._has_planned_graduation_date(
+                program
+            ),
+        }
+
+    program_levels_json = json.dumps(program_levels)
 
     return render(
         request,
@@ -135,6 +167,8 @@ def education_history_edit(request, pk):
             "form": form,
             "student": history_record.student,
             "history_record": history_record,
+            "program_levels": program_levels,
+            "program_levels_json": program_levels_json,
         }
     )
 

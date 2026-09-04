@@ -283,6 +283,25 @@ def student_detail(request, pk):
         .first()
     )
 
+    planned_graduation = None
+
+    if current_education:
+        education_level = (
+            current_education
+            .educational_program
+            .education_level
+        )
+
+        planned_graduation = (
+            student.education_history
+            .filter(
+                educational_program__education_level=education_level,
+                planned_graduation_date__isnull=False,
+            )
+            .order_by("start_date")
+            .first()
+        )
+
     return render(
         request,
         "students/student_detail.html",
@@ -292,6 +311,7 @@ def student_detail(request, pk):
             "first_education": first_education,
             "last_finished_education": last_finished_education,
             "active_tab": active_tab,
+            "planned_graduation": planned_graduation,
         }
     )
 

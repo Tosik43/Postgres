@@ -118,6 +118,12 @@ class EducationHistory(models.Model):
         blank=True
     )
 
+    planned_graduation_date = models.DateField(
+        "Планируемая дата выпуска",
+        null=True,
+        blank=True
+    )
+
     change_reasons = models.ManyToManyField(
         ChangeReason,
         blank=True,
@@ -309,6 +315,33 @@ class EducationHistory(models.Model):
                 "end_date":
                 "Для завершённого периода необходимо указать дату окончания."
             })
+
+        if (
+            self.planned_graduation_date
+            and self.student_id
+            and self.educational_program_id
+        ):
+            education_level = (
+                self.educational_program.education_level
+            )
+
+            existing_planned_date = (
+                EducationHistory.objects
+                .filter(
+                    student_id=self.student_id,
+                    educational_program__education_level=education_level,
+                    planned_graduation_date__isnull=False,
+                )
+                .exclude(pk=self.pk)
+                .exists()
+            )
+
+            if existing_planned_date:
+                raise ValidationError({
+                    "planned_graduation_date":
+                    "Планируемая дата выпуска для этого "
+                    "уровня образования уже указана."
+                })
 
 
     def save(self, *args, **kwargs):
