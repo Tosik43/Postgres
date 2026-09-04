@@ -243,3 +243,28 @@ body {
     background-color: white;
     color: black;
 }
+
+.student-tabs-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+
+    scrollbar-width: none;
+}
+
+.student-tabs-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.student-tabs-wrapper .nav {
+    flex-wrap: nowrap;
+    min-width: max-content;
+}
+
+.student-tabs-wrapper .nav-item {
+    flex: 0 0 auto;
+}
+
+.student-tabs-wrapper .nav-link {
+    white-space: nowrap;
+}

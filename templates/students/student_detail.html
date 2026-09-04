@@ -124,82 +124,216 @@
         </div>
 
 
-        <ul class="nav nav-tabs mt-4" id="studentTabs" role="tablist">
+        <div class="student-tabs-wrapper mt-4">
+            <ul class="nav nav-tabs" id="studentTabs" role="tablist">
 
-            <li class="nav-item" role="presentation">
+                <li class="nav-item" role="presentation">
 
-                <button
-                    class="nav-link {% if active_tab == 'contacts' %}active{% endif %}"
-                    id="contacts-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#contacts"
-                    type="button"
-                    role="tab"
-                    aria-controls="contacts"
-                    aria-selected="true"
-                >
-                    Контактные лица
-                </button>
+                    <button
+                        class="nav-link {% if active_tab == 'profile' %}active{% endif %}"
+                        id="profile-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#profile"
+                        type="button"
+                        role="tab"
+                        aria-controls="profile"
+                        aria-selected="{% if active_tab == 'profile' %}true{% else %}false{% endif %}"
+                    >
+                        Анкета студента
+                    </button>
 
-            </li>
+                </li>
+
+                <li class="nav-item" role="presentation">
+
+                    <button
+                        class="nav-link {% if active_tab == 'special_needs' %}active{% endif %}"
+                        id="special-needs-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#special-needs"
+                        type="button"
+                        role="tab"
+                        aria-controls="special-needs"
+                        aria-selected="{% if active_tab == 'special_needs' %}true{% else %}false{% endif %}"
+                    >
+                        Особые образовательные потребности
+                    </button>
+
+                </li>
+
+                <li class="nav-item" role="presentation">
+
+                    <button
+                        class="nav-link {% if active_tab == 'special_conditions' %}active{% endif %}"
+                        id="special-conditions-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#special-conditions"
+                        type="button"
+                        role="tab"
+                        aria-controls="special-conditions"
+                        aria-selected="{% if active_tab == 'special_conditions' %}true{% else %}false{% endif %}"
+                    >
+                        Специальные условия обучения
+                    </button>
+
+                </li>
+
+                <li class="nav-item" role="presentation">
+
+                    <button
+                        class="nav-link {% if active_tab == 'contacts' %}active{% endif %}"
+                        id="contacts-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#contacts"
+                        type="button"
+                        role="tab"
+                        aria-controls="contacts"
+                        aria-selected="true"
+                    >
+                        Контактные лица
+                    </button>
+
+                </li>
 
 
-            <li class="nav-item" role="presentation">
+                <li class="nav-item" role="presentation">
 
-                <button
-                    class="nav-link"
-                    id="portfolio-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#portfolio"
-                    type="button"
-                    role="tab"
-                    aria-controls="portfolio"
-                    aria-selected="false"
-                >
-                    Портфолио
-                </button>
+                    <button
+                        class="nav-link"
+                        id="portfolio-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#portfolio"
+                        type="button"
+                        role="tab"
+                        aria-controls="portfolio"
+                        aria-selected="false"
+                    >
+                        Портфолио
+                    </button>
 
-            </li>
+                </li>
 
 
-            <li class="nav-item" role="presentation">
+                <li class="nav-item" role="presentation">
 
-                <button
-                    class="nav-link"
-                    id="education-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#education"
-                    type="button"
-                    role="tab"
-                    aria-controls="education"
-                    aria-selected="false"
-                >
-                    История обучения
-                </button>
+                    <button
+                        class="nav-link"
+                        id="education-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#education"
+                        type="button"
+                        role="tab"
+                        aria-controls="education"
+                        aria-selected="false"
+                    >
+                        История обучения
+                    </button>
 
-            </li>
+                </li>
 
-            <li class="nav-item" role="presentation">
+                <li class="nav-item" role="presentation">
 
-                <button
-                    class="nav-link {% if active_tab == 'practice' %}active{% endif %}"
-                    id="practice-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#practice"
-                    type="button"
-                    role="tab"
-                    aria-controls="practice"
-                    aria-selected="false"
-                >
-                    Практика
-                </button>
+                    <button
+                        class="nav-link {% if active_tab == 'practice' %}active{% endif %}"
+                        id="practice-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#practice"
+                        type="button"
+                        role="tab"
+                        aria-controls="practice"
+                        aria-selected="false"
+                    >
+                        Практика
+                    </button>
 
-            </li>
+                </li>
 
-        </ul>
+                <li class="nav-item" role="presentation">
+
+                    <button
+                        class="nav-link {% if active_tab == 'postgraduate_support' %}active{% endif %}"
+                        id="postgraduate-support-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#postgraduate-support"
+                        type="button"
+                        role="tab"
+                        aria-controls="postgraduate-support"
+                        aria-selected="{% if active_tab == 'postgraduate_support' %}true{% else %}false{% endif %}"
+                    >
+                        Постдипломное сопровождение
+                    </button>
+
+                </li>
+
+            </ul>
+
+        </div>
 
 
         <div class="tab-content pt-4" id="studentTabsContent">
+
+            <div
+                class="tab-pane fade {% if active_tab == 'profile' %}show active{% endif %}"
+                id="profile"
+                role="tabpanel"
+                aria-labelledby="profile-tab"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <h4 class="mb-0">
+                        Анкета студента
+                    </h4>
+
+                </div>
+
+                <div class="alert alert-light border text-muted">
+                    Раздел анкеты студента будет добавлен следующим этапом.
+                </div>
+
+            </div>
+
+            <div
+                class="tab-pane fade {% if active_tab == 'special_needs' %}show active{% endif %}"
+                id="special-needs"
+                role="tabpanel"
+                aria-labelledby="special-needs-tab"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <h4 class="mb-0">
+                        Особые образовательные потребности
+                    </h4>
+
+                </div>
+
+                <div class="alert alert-light border text-muted">
+                    Раздел особых образовательных потребностей будет добавлен следующим этапом.
+                </div>
+
+            </div>
+
+            <div
+                class="tab-pane fade {% if active_tab == 'special_conditions' %}show active{% endif %}"
+                id="special-conditions"
+                role="tabpanel"
+                aria-labelledby="special-conditions-tab"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <h4 class="mb-0">
+                        Специальные условия обучения
+                    </h4>
+
+                </div>
+
+                <div class="alert alert-light border text-muted">
+                    Раздел специальных условий обучения будет добавлен следующим этапом.
+                </div>
+
+            </div>
 
             <div
                 class="tab-pane fade {% if active_tab == 'contacts' %}show active{% endif %}"
@@ -550,6 +684,27 @@
 
                     </table>
 
+                </div>
+
+            </div>
+
+            <div
+                class="tab-pane fade {% if active_tab == 'postgraduate_support' %}show active{% endif %}"
+                id="postgraduate-support"
+                role="tabpanel"
+                aria-labelledby="postgraduate-support-tab"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <h4 class="mb-0">
+                        Постдипломное сопровождение
+                    </h4>
+
+                </div>
+
+                <div class="alert alert-light border text-muted">
+                    Раздел постдипломного сопровождения будет добавлен следующим этапом.
                 </div>
 
             </div>
