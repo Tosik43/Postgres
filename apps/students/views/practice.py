@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core.exceptions import ValidationError
 
 from ..models.student import Student
 from ..forms.practice import PracticeForm
@@ -20,19 +21,27 @@ def practice_create(request, student_pk):
         form = PracticeForm(request.POST)
 
         if form.is_valid():
-
             practice = form.save(commit=False)
             practice.student = student
-            practice.save()
 
-            messages.success(
-                request,
-                "Практика успешно добавлена.",
-            )
+            try:
+                practice.save()
 
-            return redirect(
-                f"{reverse('student_detail', kwargs={'pk': student.pk})}?tab=practice"
-            )
+            except ValidationError as e:
+                form.add_error(
+                    None,
+                    "Такая практика для этого студента уже существует."
+                )
+
+            else:
+                messages.success(
+                    request,
+                    "Практика успешно добавлена."
+                )
+
+                return redirect(
+                    f"{reverse('student_detail', kwargs={'pk': student.pk})}?tab=practice"
+                )
 
     else:
 
