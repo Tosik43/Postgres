@@ -21,3 +21,5 @@ from .contact_person import (
     contact_person_edit,
     contact_person_delete
 )
+
+from .student_questionnaire import student_questionnaire

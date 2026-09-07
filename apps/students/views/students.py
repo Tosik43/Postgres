@@ -24,6 +24,7 @@ from ..models import (
     Gender,
     EducationHistory,
     EducationHistoryStatus,
+    StudentQuestionnaire,
 )
 
 from ..forms import StudentForm
@@ -252,6 +253,12 @@ def student_detail(request, pk):
         pk=pk
     )
 
+    questionnaire = getattr(
+        student,
+        "questionnaire",
+        None
+    )
+
     active_tab = request.GET.get("tab", "contacts")
 
     current_education = (
@@ -312,6 +319,7 @@ def student_detail(request, pk):
             "last_finished_education": last_finished_education,
             "active_tab": active_tab,
             "planned_graduation": planned_graduation,
+            "questionnaire": questionnaire,
         }
     )
 

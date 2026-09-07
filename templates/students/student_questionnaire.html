@@ -1,0 +1,1231 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h3 class="mb-1">
+                Анкета студента
+            </h3>
+
+            <div class="text-muted">
+                Студент:
+                <strong>{{ student.full_name }}</strong>
+            </div>
+        </div>
+
+        <a
+            href="{% url 'student_detail' student.pk %}?tab=profile"
+            class="btn btn-secondary"
+        >
+            ← Вернуться к анкете
+        </a>
+
+    </div>
+
+
+    <form method="post">
+
+        {% csrf_token %}
+
+
+        {% if form.non_field_errors %}
+
+            <div class="alert alert-danger">
+
+                {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- Предыдущее образование -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>Предыдущее образование</strong>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <label
+                            for="{{ form.previous_education_type.id_for_label }}"
+                            class="form-label"
+                        >
+                            Предыдущее образование
+                        </label>
+
+                        {{ form.previous_education_type }}
+
+                        {% for error in form.previous_education_type.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <div
+                        id="previous-education-other-container"
+                        class="col-md-6"
+                        style="display: none;"
+                    >
+
+                        <label
+                            for="{{ form.previous_education_other.id_for_label }}"
+                            class="form-label"
+                        >
+                            Укажите свой вариант
+                        </label>
+
+                        {{ form.previous_education_other }}
+
+                        {% for error in form.previous_education_other.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Место проживания -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>Место проживания в период обучения</strong>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <label
+                            for="{{ form.accommodation_type.id_for_label }}"
+                            class="form-label"
+                        >
+                            Место проживания
+                        </label>
+
+                        {{ form.accommodation_type }}
+
+                        {% for error in form.accommodation_type.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <div
+                        id="accommodation-other-container"
+                        class="col-md-6"
+                        style="display: none;"
+                    >
+
+                        <label
+                            for="{{ form.accommodation_other.id_for_label }}"
+                            class="form-label"
+                        >
+                            Укажите свой вариант
+                        </label>
+
+                        {{ form.accommodation_other }}
+
+                        {% for error in form.accommodation_other.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Когда принято решение -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>Когда принято решение о поступлении</strong>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <label
+                            for="{{ form.decision_time.id_for_label }}"
+                            class="form-label"
+                        >
+                            Когда принято решение о поступлении
+                        </label>
+
+                        {{ form.decision_time }}
+
+                        {% for error in form.decision_time.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <div
+                        id="decision-time-other-container"
+                        class="col-md-6"
+                        style="display: none;"
+                    >
+
+                        <label
+                            for="{{ form.decision_time_other.id_for_label }}"
+                            class="form-label"
+                        >
+                            Укажите свой вариант
+                        </label>
+
+                        {{ form.decision_time_other }}
+
+                        {% for error in form.decision_time_other.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Аргументы выбора -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>
+                    Три самых важных аргумента выбора образовательной программы
+                </strong>
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-text mb-3">
+                    Выберите не более трёх вариантов.
+                </div>
+
+
+                <div class="row g-2">
+
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="border rounded p-2 w-100 h-100 d-flex align-items-center gap-2"
+                        >
+
+                            <input
+                                class="form-check-input mt-0"
+                                type="checkbox"
+                                name="choice_arguments"
+                                value="Популярность, престиж профессии"
+                                id="choice_argument_1"
+                            >
+
+                            <span>
+                                Популярность, престиж профессии
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="border rounded p-2 w-100 h-100 d-flex align-items-center gap-2"
+                        >
+
+                            <input
+                                class="form-check-input mt-0"
+                                type="checkbox"
+                                name="choice_arguments"
+                                value="Доход, который она приносит"
+                                id="choice_argument_2"
+                            >
+
+                            <span>
+                                Доход
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="border rounded p-2 w-100 h-100 d-flex align-items-center gap-2"
+                        >
+
+                            <input
+                                class="form-check-input mt-0"
+                                type="checkbox"
+                                name="choice_arguments"
+                                value="Карьерные перспективы"
+                                id="choice_argument_3"
+                            >
+
+                            <span>
+                                Карьерные перспективы
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="border rounded p-2 w-100 h-100 d-flex align-items-center gap-2"
+                        >
+
+                            <input
+                                class="form-check-input mt-0"
+                                type="checkbox"
+                                name="choice_arguments"
+                                value="Легкость поступления"
+                                id="choice_argument_4"
+                            >
+
+                            <span>
+                                Легкость поступления
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="border rounded p-2 w-100 h-100 d-flex align-items-center gap-2"
+                        >
+
+                            <input
+                                class="form-check-input mt-0"
+                                type="checkbox"
+                                name="choice_arguments"
+                                value="Несложность получения профессии"
+                                id="choice_argument_5"
+                            >
+
+                            <span>
+                                Несложность получения профессии
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="border rounded p-2 w-100 h-100 d-flex align-items-center gap-2"
+                        >
+
+                            <input
+                                class="form-check-input mt-0"
+                                type="checkbox"
+                                name="choice_arguments"
+                                value="Соответствие семейной традиции"
+                                id="choice_argument_6"
+                            >
+
+                            <span>
+                                Соответствие семейной традиции
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="border rounded p-2 w-100 h-100 d-flex align-items-center gap-2"
+                        >
+
+                            <input
+                                class="form-check-input mt-0"
+                                type="checkbox"
+                                name="choice_arguments"
+                                value="Соответствие профессии моим увлечениям, хобби"
+                                id="choice_argument_7"
+                            >
+
+                            <span>
+                                Соответствие профессии моим увлечениям, хобби
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="border rounded p-2 w-100 h-100 d-flex align-items-center gap-2"
+                        >
+
+                            <input
+                                class="form-check-input mt-0"
+                                type="checkbox"
+                                name="choice_arguments"
+                                value="Возможность работы по профессии с учетом состояния моего здоровья"
+                                id="choice_argument_8"
+                            >
+
+                            <span>
+                                Возможность работы по профессии с учетом состояния моего здоровья
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="border rounded p-2 w-100 h-100 d-flex align-items-center gap-2"
+                        >
+
+                            <input
+                                class="form-check-input mt-0"
+                                type="checkbox"
+                                name="choice_arguments"
+                                value="Другое"
+                                id="choice_argument_other"
+                            >
+
+                            <span>
+                                Другое
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="choice-arguments-other-container"
+                    class="mt-3"
+                    style="display: none;"
+                >
+
+                    <label
+                        for="{{ form.choice_arguments_other.id_for_label }}"
+                        class="form-label"
+                    >
+                        Укажите свой вариант
+                    </label>
+
+                    {{ form.choice_arguments_other }}
+
+                    {% for error in form.choice_arguments_other.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+        
+        <!-- Искусство -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>Искусство</strong>
+            </div>
+
+            <div class="card-body">
+
+                <!-- Виды искусства -->
+
+                <div class="mb-3">
+
+                    <label
+                        for="{{ form.art_types.id_for_label }}"
+                        class="form-label"
+                    >
+                        Виды искусства
+                    </label>
+
+                    {{ form.art_types }}
+
+                    {% for error in form.art_types.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Как занимались -->
+
+                <div class="mb-3">
+
+                    <label class="form-label d-block">
+                        Как занимались?
+                    </label>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="art_way"
+                                    id="art_way_school"
+                                    value="school_studio"
+                                    {% if form.art_way.value == "school_studio" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="art_way_school"
+                                >
+                                    Школа, студия и пр.
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="art_way"
+                                    id="art_way_self"
+                                    value="self"
+                                    {% if form.art_way.value == "self" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="art_way_self"
+                                >
+                                    Самостоятельно
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% for error in form.art_way.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Когда занимались -->
+
+                <div class="mb-3">
+
+                    <label class="form-label d-block">
+                        Когда занимались?
+                    </label>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="art_period"
+                                    id="art_period_school"
+                                    value="school_college"
+                                    {% if form.art_period.value == "school_college" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="art_period_school"
+                                >
+                                    Во время учебы в школе (колледже)
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="art_period"
+                                    id="art_period_current"
+                                    value="current"
+                                    {% if form.art_period.value == "current" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="art_period_current"
+                                >
+                                    Продолжаю заниматься в настоящее время
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% for error in form.art_period.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Достижения -->
+
+                <div>
+
+                    <label
+                        for="{{ form.art_achievements.id_for_label }}"
+                        class="form-label"
+                    >
+                        Достижения
+                    </label>
+
+                    {{ form.art_achievements }}
+
+                    {% for error in form.art_achievements.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Творчество -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>Творчество</strong>
+            </div>
+
+            <div class="card-body">
+
+                <!-- Виды творчества -->
+
+                <div class="mb-3">
+
+                    <label
+                        for="{{ form.creativity_types.id_for_label }}"
+                        class="form-label"
+                    >
+                        Виды творчества
+                    </label>
+
+                    {{ form.creativity_types }}
+
+                    {% for error in form.creativity_types.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Как занимались -->
+
+                <div class="mb-3">
+
+                    <label class="form-label d-block">
+                        Как занимались?
+                    </label>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="creativity_way"
+                                    id="creativity_way_school"
+                                    value="school_studio"
+                                    {% if form.creativity_way.value == "school_studio" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="creativity_way_school"
+                                >
+                                    Школа, студия и пр.
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="creativity_way"
+                                    id="creativity_way_self"
+                                    value="self"
+                                    {% if form.creativity_way.value == "self" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="creativity_way_self"
+                                >
+                                    Самостоятельно
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% for error in form.creativity_way.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Когда занимались -->
+
+                <div class="mb-3">
+
+                    <label class="form-label d-block">
+                        Когда занимались?
+                    </label>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="creativity_period"
+                                    id="creativity_period_school"
+                                    value="school_college"
+                                    {% if form.creativity_period.value == "school_college" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="creativity_period_school"
+                                >
+                                    Во время учебы в школе (колледже)
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="creativity_period"
+                                    id="creativity_period_current"
+                                    value="current"
+                                    {% if form.creativity_period.value == "current" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="creativity_period_current"
+                                >
+                                    Продолжаю заниматься в настоящее время
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% for error in form.creativity_period.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Достижения -->
+
+                <div>
+
+                    <label
+                        for="{{ form.creativity_achievements.id_for_label }}"
+                        class="form-label"
+                    >
+                        Достижения
+                    </label>
+
+                    {{ form.creativity_achievements }}
+
+                    {% for error in form.creativity_achievements.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Спорт -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>Спорт</strong>
+            </div>
+
+            <div class="card-body">
+
+                <!-- Виды спорта -->
+
+                <div class="mb-3">
+
+                    <label
+                        for="{{ form.sport_types.id_for_label }}"
+                        class="form-label"
+                    >
+                        Виды спорта
+                    </label>
+
+                    {{ form.sport_types }}
+
+                    {% for error in form.sport_types.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Когда занимались -->
+
+                <div class="mb-3">
+
+                    <label class="form-label d-block">
+                        Когда занимались?
+                    </label>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="sport_period"
+                                    id="sport_period_school"
+                                    value="school_college"
+                                    {% if form.sport_period.value == "school_college" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="sport_period_school"
+                                >
+                                    Во время учебы в школе (колледже)
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="sport_period"
+                                    id="sport_period_current"
+                                    value="current"
+                                    {% if form.sport_period.value == "current" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="sport_period_current"
+                                >
+                                    Продолжаю заниматься в настоящее время
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% for error in form.sport_period.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Достижения -->
+
+                <div>
+
+                    <label
+                        for="{{ form.sport_achievements.id_for_label }}"
+                        class="form-label"
+                    >
+                        Достижения
+                    </label>
+
+                    {{ form.sport_achievements }}
+
+                    {% for error in form.sport_achievements.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Общественная деятельность -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>Общественная деятельность</strong>
+            </div>
+
+            <div class="card-body">
+
+                <!-- Виды общественной деятельности -->
+
+                <div class="mb-3">
+
+                    <label
+                        for="{{ form.social_activity_types.id_for_label }}"
+                        class="form-label"
+                    >
+                        Виды общественной деятельности
+                    </label>
+
+                    {{ form.social_activity_types }}
+
+                    {% for error in form.social_activity_types.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Когда занимались -->
+
+                <div>
+
+                    <label class="form-label d-block">
+                        Когда занимались?
+                    </label>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="social_activity_period"
+                                    id="social_activity_period_school"
+                                    value="school_college"
+                                    {% if form.social_activity_period.value == "school_college" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="social_activity_period_school"
+                                >
+                                    Во время учебы в школе (колледже)
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="social_activity_period"
+                                    id="social_activity_period_current"
+                                    value="current"
+                                    {% if form.social_activity_period.value == "current" %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="social_activity_period_current"
+                                >
+                                    Продолжаю заниматься в настоящее время
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% for error in form.social_activity_period.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Участие в чемпионатах «Абилимпикс» -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>Участие в чемпионатах «Абилимпикс»</strong>
+            </div>
+
+            <div class="card-body">
+
+                <label
+                    for="{{ form.abilimpics.id_for_label }}"
+                    class="form-label"
+                >
+                    Участие в чемпионатах
+                </label>
+
+                {{ form.abilimpics }}
+
+                {% for error in form.abilimpics.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!-- Дополнительные сведения -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>Дополнительные сведения о себе</strong>
+            </div>
+
+            <div class="card-body">
+
+                <label
+                    for="{{ form.additional_information.id_for_label }}"
+                    class="form-label"
+                >
+                    Хобби, увлечения и другие сведения
+                </label>
+
+                {{ form.additional_information }}
+
+                {% for error in form.additional_information.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!-- Предпочтительные способы связи -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <strong>Предпочтительные способы связи</strong>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-2">
+
+                    {% for value, label in form.preferred_contact_methods.field.choices %}
+
+                        <div class="col-md-4">
+
+                            <div class="form-check">
+
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="preferred_contact_methods"
+                                    value="{{ value }}"
+                                    id="preferred_contact_{{ value }}"
+                                    {% if value in form.preferred_contact_methods.value %}checked{% endif %}
+                                >
+
+                                <label
+                                    class="form-check-label"
+                                    for="preferred_contact_{{ value }}"
+                                >
+                                    {{ label }}
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% for error in form.preferred_contact_methods.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- Кнопки -->
+
+        <div class="d-flex justify-content-end gap-2 mb-4">
+
+            <a
+                href="{% url 'student_detail' student.pk %}?tab=profile"
+                class="btn btn-secondary"
+            >
+                Отмена
+            </a>
+
+            <button
+                type="submit"
+                class="btn btn-success"
+            >
+                Сохранить анкету
+            </button>
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+{{ questionnaire.choice_arguments|json_script:"saved-choice-arguments" }}
+
+
+{% load static %}
+
+<script src="{% static 'students/js/questionnaire.js' %}"></script>
+
+
+{% endblock %}
