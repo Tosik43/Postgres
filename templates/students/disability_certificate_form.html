@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if is_edit %}
+        Редактирование справки МСЭ
+    {% else %}
+        Добавление справки МСЭ
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1">
+            {% if is_edit %}
+                Редактирование справки МСЭ
+            {% else %}
+                Добавление справки МСЭ
+            {% endif %}
+        </h2>
+        <div class="text-muted">
+            Студент: {{ student.full_name }}
+        </div>
+    </div>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <strong>Реквизиты справки</strong>
+        </div>
+
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label for="{{ form.series.id_for_label }}" class="form-label">
+                        Серия
+                    </label>
+                    {{ form.series }}
+                    {{ form.series.errors }}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.number.id_for_label }}" class="form-label">
+                        Номер
+                    </label>
+                    {{ form.number }}
+                    {{ form.number.errors }}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.issue_date.id_for_label }}" class="form-label">
+                        Дата выдачи *
+                    </label>
+                    {{ form.issue_date }}
+                    {{ form.issue_date.errors }}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.expiry_date.id_for_label }}" class="form-label">
+                        Дата окончания действия
+                    </label>
+                    {{ form.expiry_date }}
+                    {{ form.expiry_date.errors }}
+                </div>
+
+                <div class="col-12">
+                    <div class="form-check">
+                        {{ form.is_permanent }}
+                        <label for="{{ form.is_permanent.id_for_label }}" class="form-check-label">
+                            Бессрочная
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <strong>Сведения об инвалидности</strong>
+        </div>
+
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label for="{{ form.disability_group.id_for_label }}" class="form-label">
+                        Группа инвалидности
+                    </label>
+                    {{ form.disability_group }}
+                    {{ form.disability_group.errors }}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.disability_reason.id_for_label }}" class="form-label">
+                        Причина инвалидности
+                    </label>
+                    {{ form.disability_reason }}
+                    {{ form.disability_reason.errors }}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.establishment_type.id_for_label }}" class="form-label">
+                        Инвалидность установлена
+                    </label>
+                    {{ form.establishment_type }}
+                    {{ form.establishment_type.errors }}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.disability_start_date.id_for_label }}" class="form-label">
+                        Дата установления инвалидности
+                    </label>
+                    {{ form.disability_start_date }}
+                    {{ form.disability_start_date.errors }}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.disability_end_date.id_for_label }}" class="form-label">
+                        Дата окончания инвалидности
+                    </label>
+                    {{ form.disability_end_date }}
+                    {{ form.disability_end_date.errors }}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.next_reexamination_date.id_for_label }}" class="form-label">
+                        Дата следующего переосвидетельствования
+                    </label>
+                    {{ form.next_reexamination_date }}
+                    {{ form.next_reexamination_date.errors }}
+                </div>
+
+                <div class="col-12">
+                    <label for="{{ form.document.id_for_label }}" class="form-label">
+                        Файл справки
+                    </label>
+                    {{ form.document }}
+                    {{ form.document.errors }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mb-4">
+        <button type="submit" class="btn btn-primary">
+            Сохранить справку
+        </button>
+
+        <a href="/{{ student.pk }}/?tab=disability_certificates" class="btn btn-outline-secondary">
+            Отмена
+        </a>
+    </div>
+
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const permanentCheckbox = document.getElementById(
+        "{{ form.is_permanent.id_for_label }}"
+    );
+
+    const expiryDate = document.getElementById(
+        "{{ form.expiry_date.id_for_label }}"
+    );
+
+    function updateExpiryDate() {
+        expiryDate.disabled = permanentCheckbox.checked;
+
+        if (permanentCheckbox.checked) {
+            expiryDate.value = "";
+        }
+    }
+
+    permanentCheckbox.addEventListener("change", updateExpiryDate);
+
+    updateExpiryDate();
+});
+</script>
+
+{% endblock %}

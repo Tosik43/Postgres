@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import students, education_history, contact_person, practice, student_questionnaire
+from .views import students, education_history, contact_person, practice, student_questionnaire, disability_certificate_create, disability_certificate_history, disability_certificate_edit
 
 urlpatterns = [
     path(
@@ -22,6 +22,21 @@ urlpatterns = [
         "<int:student_pk>/questionnaire/",
         student_questionnaire,
         name="student_questionnaire",
+    ),
+    path(
+        "<int:student_pk>/disability-certificates/add/",
+        disability_certificate_create,
+        name="disability_certificate_create",
+    ),
+    path(
+        "<int:student_pk>/disability-certificates/<int:certificate_pk>/edit/",
+        disability_certificate_edit,
+        name="disability_certificate_edit",
+    ),
+    path(
+        "<int:student_pk>/disability-certificates/history/",
+        disability_certificate_history,
+        name="disability_certificate_history",
     ),
     path(
         "<int:pk>/",

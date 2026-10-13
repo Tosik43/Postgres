@@ -23,3 +23,4 @@ from .contact_person import (
 )
 
 from .student_questionnaire import student_questionnaire
+from .disability_certificate import disability_certificate_create, disability_certificate_history, disability_certificate_edit

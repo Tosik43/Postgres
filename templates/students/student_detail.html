@@ -139,6 +139,21 @@
             <ul class="nav nav-tabs" id="studentTabs" role="tablist">
 
                 <li class="nav-item" role="presentation">
+                    <button
+                        class="nav-link {% if active_tab == 'disability_certificates' %}active{% endif %}"
+                        id="disability-certificates-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#disability-certificates"
+                        type="button"
+                        role="tab"
+                        aria-controls="disability-certificates"
+                        aria-selected="{% if active_tab == 'disability_certificates' %}true{% else %}false{% endif %}"
+                    >
+                        Справки МСЭ
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
 
                     <button
                         class="nav-link {% if active_tab == 'profile' %}active{% endif %}"
@@ -282,6 +297,154 @@
 
 
         <div class="tab-content pt-4" id="studentTabsContent">
+
+
+            <div
+                class="tab-pane fade {% if active_tab == 'disability_certificates' %}show active{% endif %}"
+                id="disability-certificates"
+                role="tabpanel"
+                aria-labelledby="disability-certificates-tab"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0">Справки МСЭ</h4>
+
+                    <div class="d-flex gap-2">
+                        <a
+                            href="/{{ student.pk }}/disability-certificates/add/"
+                            class="btn btn-primary"
+                        >
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Добавить справку
+                        </a>
+
+                        <a
+                            href="/{{ student.pk }}/disability-certificates/history/"
+                            class="btn btn-outline-secondary"
+                        >
+                            <i class="bi bi-clock-history me-1"></i>
+                            История справок
+                        </a>
+                    </div>
+                </div>
+
+                {% if current_disability_certificate %}
+                    {% with certificate=current_disability_certificate %}
+                        <div class="card shadow-sm mb-4">
+
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <strong>Действующая справка МСЭ</strong>
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-success">Действует</span>
+
+                                    <a
+                                        href="/{{ student.pk }}/disability-certificates/{{ certificate.pk }}/edit/"
+                                        class="btn btn-sm btn-outline-primary"
+                                    >
+                                        <i class="bi bi-pencil me-1"></i>
+                                        Редактировать
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Серия</div>
+                                        <div>{{ certificate.series|default:"Не указана" }}</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Номер</div>
+                                        <div>{{ certificate.number|default:"Не указан" }}</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Дата выдачи</div>
+                                        <div>{{ certificate.issue_date|date:"d.m.Y" }}</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Дата окончания действия</div>
+                                        <div>
+                                            {% if certificate.is_permanent %}
+                                                Бессрочно
+                                            {% elif certificate.expiry_date %}
+                                                {{ certificate.expiry_date|date:"d.m.Y" }}
+                                            {% else %}
+                                                Не указана
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Группа инвалидности</div>
+                                        <div>{{ certificate.get_disability_group_display|default:"Не указана" }}</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Причина инвалидности</div>
+                                        <div>{{ certificate.disability_reason|default:"Не указана" }}</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Инвалидность установлена</div>
+                                        <div>{{ certificate.get_establishment_type_display|default:"Не указано" }}</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Дата установления инвалидности</div>
+                                        <div>
+                                            {{ certificate.disability_start_date|date:"d.m.Y"|default:"Не указана" }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Дата окончания инвалидности</div>
+                                        <div>
+                                            {{ certificate.disability_end_date|date:"d.m.Y"|default:"Не указана" }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Дата следующего переосвидетельствования</div>
+                                        <div>
+                                            {{ certificate.next_reexamination_date|date:"d.m.Y"|default:"Не указана" }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Файл справки</div>
+                                        <div>
+                                            {% if certificate.document %}
+                                                <a href="{{ certificate.document.url }}" target="_blank" rel="noopener">
+                                                    <i class="bi bi-file-earmark-text me-1"></i>
+                                                    Открыть справку
+                                                </a>
+                                            {% else %}
+                                                Не прикреплён
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-muted small">Дата внесения в систему</div>
+                                        <div>{{ certificate.created_at|date:"d.m.Y H:i" }}</div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% else %}
+                    <div class="alert alert-light border">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Нет действующей справки
+                    </div>
+                {% endif %}
+            </div>
 
             <div
                 class="tab-pane fade {% if active_tab == 'profile' %}show active{% endif %}"

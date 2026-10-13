@@ -11,3 +11,4 @@ from .education_history import (
 from .contact_person import ContactPerson
 from .practice import Practice
 from .student_questionnaire import StudentQuestionnaire
+from .disability_certificate import DisabilityCertificate

@@ -252,6 +252,23 @@ def student_detail(request, pk):
         Student,
         pk=pk
     )
+    
+    disability_certificates = student.disability_certificates.all()
+
+    active_certificates = [
+        certificate
+        for certificate in disability_certificates
+        if certificate.is_active
+    ]
+
+    current_disability_certificate = max(
+        active_certificates,
+        key=lambda certificate: (
+            certificate.issue_date,
+            certificate.created_at,
+        ),
+        default=None,
+    )
 
     questionnaire = getattr(
         student,
@@ -259,7 +276,7 @@ def student_detail(request, pk):
         None
     )
 
-    active_tab = request.GET.get("tab", "contacts")
+    active_tab = request.GET.get("tab", "disability_certificates")
 
     current_education = (
         student.education_history
@@ -320,6 +337,8 @@ def student_detail(request, pk):
             "active_tab": active_tab,
             "planned_graduation": planned_graduation,
             "questionnaire": questionnaire,
+            "disability_certificates": disability_certificates,
+            "current_disability_certificate": current_disability_certificate,
         }
     )
 
