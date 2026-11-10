@@ -16,6 +16,8 @@ class StudentForm(forms.ModelForm):
             "email",
             "vk",
             "phone",
+            "health_disorder",
+            "health_disorder_comment",
         ]
 
         widgets = {
@@ -25,6 +27,20 @@ class StudentForm(forms.ModelForm):
                 attrs={
                     "type": "date",
                     "class": "form-control",
+                }
+            ),
+
+            "health_disorder": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+
+            "health_disorder_comment": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 3,
+                    "placeholder": "Дополнительная информация о нарушении здоровья",
                 }
             ),
         }
@@ -47,3 +63,14 @@ class StudentForm(forms.ModelForm):
                 field.widget.attrs["class"] = f"{css_class} is-invalid"
             else:
                 field.widget.attrs["class"] = css_class
+
+        self.fields["health_disorder"].queryset = (
+            self.fields["health_disorder"].queryset.filter(is_active=True)
+            | self.fields["health_disorder"].queryset.filter(
+                pk=self.instance.health_disorder_id
+            )
+            if self.instance.pk and self.instance.health_disorder_id
+            else self.fields["health_disorder"].queryset.filter(is_active=True)
+        )
+
+        self.fields["health_disorder"].empty_label = "Выберите вид нарушения здоровья"

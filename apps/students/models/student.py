@@ -41,6 +41,20 @@ class Student(models.Model):
     validators=[validate_phone]
     )
 
+    health_disorder = models.ForeignKey(
+        "directories.HealthDisorder",
+        on_delete=models.PROTECT,
+        verbose_name="Вид нарушения здоровья",
+        related_name="students",
+        null=True,
+        blank=True,
+    )
+
+    health_disorder_comment = models.TextField(
+        "Комментарий к нарушению здоровья",
+        blank=True,
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )

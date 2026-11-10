@@ -118,6 +118,38 @@
 
             </div>
 
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        {{ form.health_disorder.label }}
+                    </label>
+
+                    {{ form.health_disorder }}
+
+                    {% if form.health_disorder.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.health_disorder.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        {{ form.health_disorder_comment.label }}
+                    </label>
+
+                    {{ form.health_disorder_comment }}
+
+                    {% if form.health_disorder_comment.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.health_disorder_comment.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+
             <hr>
 
             <button type="submit" class="btn btn-success">
@@ -140,7 +172,7 @@
 
 </div>
 
-<script src="https://unpkg.com/imask"></script>
+<script src="{% static 'students/js/imask.min.js' %}"></script>
 <script src="{% static 'students/js/input_mask.js' %}"></script>
 
 {% endblock %}

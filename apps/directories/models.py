@@ -91,6 +91,7 @@ class EducationalProgram(models.Model):
         SPECIALIST = "specialist", "Специалитет"
         MASTER = "master", "Магистратура"
         POSTGRADUATE = "postgraduate", "Аспирантура"
+        SPO = "spo", "СПО"
 
     code = models.CharField(
         "Код направления",

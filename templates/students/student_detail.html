@@ -47,6 +47,28 @@
             </tr>
 
             <tr>
+                <th>Вид нарушения здоровья</th>
+                <td>
+                    {% if student.health_disorder %}
+                        {{ student.health_disorder.name }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Комментарий к нарушению здоровья</th>
+                <td>
+                    {% if student.health_disorder_comment %}
+                        {{ student.health_disorder_comment|linebreaksbr }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
                 <th>Год поступления</th>
                 <td>
                     {% if first_education %}
