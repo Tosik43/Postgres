@@ -27,7 +27,12 @@ from ..models import (
     StudentQuestionnaire,
 )
 
-from ..forms import StudentForm
+from apps.students.forms import (
+    StudentForm,
+    StudentSpecialNeedsForm,
+    StudentSpecialConditionsForm,
+)
+
 
 def student_list(request):
 
@@ -276,6 +281,18 @@ def student_detail(request, pk):
         None
     )
 
+    special_needs = getattr(
+        student,
+        "special_needs",
+        None
+    )
+
+    special_conditions = getattr(
+        student,
+        "special_conditions",
+        None,
+    )
+
     active_tab = request.GET.get("tab", "disability_certificates")
 
     current_education = (
@@ -337,6 +354,10 @@ def student_detail(request, pk):
             "active_tab": active_tab,
             "planned_graduation": planned_graduation,
             "questionnaire": questionnaire,
+            "special_needs": special_needs,
+            "special_conditions": special_conditions,
+            "special_conditions_form": StudentSpecialConditionsForm,
+            "special_needs_form": StudentSpecialNeedsForm,
             "disability_certificates": disability_certificates,
             "current_disability_certificate": current_disability_certificate,
         }

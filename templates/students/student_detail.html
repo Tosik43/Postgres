@@ -320,7 +320,6 @@
 
         <div class="tab-content pt-4" id="studentTabsContent">
 
-
             <div
                 class="tab-pane fade {% if active_tab == 'disability_certificates' %}show active{% endif %}"
                 id="disability-certificates"
@@ -920,47 +919,418 @@
                 {% endif %}
 
             </div>
-
+                        
             <div
                 class="tab-pane fade {% if active_tab == 'special_needs' %}show active{% endif %}"
                 id="special-needs"
                 role="tabpanel"
                 aria-labelledby="special-needs-tab"
             >
-
                 <div class="d-flex justify-content-between align-items-center mb-3">
-
-                    <h4 class="mb-0">
-                        Особые образовательные потребности
-                    </h4>
-
+                    <h4 class="mb-0">Особые образовательные потребности</h4>
                 </div>
 
-                <div class="alert alert-light border text-muted">
-                    Раздел особых образовательных потребностей будет добавлен следующим этапом.
-                </div>
+                {% if special_needs %}
 
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Предоставленные документы</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                <strong>ИПРА:</strong>
+                                {% if special_needs.has_ipra == True %}
+                                    Да
+                                {% elif special_needs.has_ipra == False %}
+                                    Нет
+                                {% else %}
+                                    Не указано
+                                {% endif %}
+                            </p>
+                            <p class="mb-0">
+                                <strong>Заключение ПМПК:</strong>
+                                {% if special_needs.has_pmpk_conclusion == True %}
+                                    Да
+                                {% elif special_needs.has_pmpk_conclusion == False %}
+                                    Нет
+                                {% else %}
+                                    Не указано
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Особенности психофизического развития</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <strong>Нарушения слуха</strong>
+                                    <div>{{ special_needs.get_hearing_impairment_display|default:"Не указано" }}</div>
+                                </div>
+                                <div class="col-12">
+                                    <strong>Нарушения зрения</strong>
+                                    <div>{{ special_needs.get_vision_impairment_display|default:"Не указано" }}</div>
+                                </div>
+                                <div class="col-12">
+                                    <strong>Нарушения речи</strong>
+                                    <div>{{ special_needs.get_speech_impairment_display|default:"Не указано" }}</div>
+                                </div>
+                                <div class="col-12">
+                                    <strong>Трудности передвижения</strong>
+                                    <div>{{ special_needs.get_mobility_difficulties_display|default:"Не указано" }}</div>
+                                </div>
+                                <div class="col-12">
+                                    <strong>Нарушения органов и систем организма</strong>
+                                    <div>{{ special_needs.get_organ_system_disorders_display|default:"Не указано" }}</div>
+                                </div>
+                                <div class="col-12">
+                                    <strong>Другие особенности</strong>
+                                    <div>{{ special_needs.other_health_features|linebreaksbr|default:"Не указано" }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Средства реабилитации и состояние здоровья</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                <strong>Средства коррекции и реабилитации:</strong>
+                                <span>
+                                    {{ special_needs.rehabilitation_aids|linebreaksbr|default:"Не указано" }}
+                                </span>
+                            </p>
+
+                            <p>
+                                <strong>Приступы, обмороки, связанные с заболеванием:</strong>
+                                {% if special_needs.has_health_episodes == True %}
+                                    Да
+                                {% elif special_needs.has_health_episodes == False %}
+                                    Нет
+                                {% else %}
+                                    Не указано
+                                {% endif %}
+                            </p>
+
+                            {% if special_needs.health_episode_actions %}
+                                <p class="mb-0">
+                                    <strong>Необходимые действия:</strong>
+                                    {{ special_needs.health_episode_actions|linebreaksbr }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Особые образовательные потребности</strong>
+                        </div>
+                        <div class="card-body">
+
+                            <h6 class="fw-bold">Для студентов с нарушениями слуха</h6>
+                            {% if special_needs.hearing_needs %}
+                                <ul>
+                                    {% for value in special_needs.hearing_needs %}
+                                        {% for code, label in special_needs_form.HEARING_NEEDS %}
+                                            {% if value == code %}
+                                                <li>{{ label }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted">Раздел не заполнен</p>
+                            {% endif %}
+
+                            <h6 class="fw-bold">Для студентов с нарушениями зрения</h6>
+                            {% if special_needs.vision_needs or special_needs.preferred_material_formats %}
+                                <ul>
+                                    {% for value in special_needs.vision_needs %}
+                                        {% for code, label in special_needs_form.VISION_NEEDS %}
+                                            {% if value == code %}
+                                                <li>
+                                                    {{ label }}
+                                                    {% if code == "large_font" and special_needs.enlarged_font_size %}
+                                                        — размер шрифта: {{ special_needs.enlarged_font_size }}
+                                                    {% endif %}
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+
+                                    {% if special_needs.preferred_material_formats %}
+                                        <li>
+                                            Предпочтительный способ восприятия учебных материалов:
+                                            <ul>
+                                                {% for value in special_needs.preferred_material_formats %}
+                                                    {% for code, label in special_needs_form.MATERIAL_FORMATS %}
+                                                        {% if value == code %}
+                                                            <li>{{ label }}</li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted">Раздел не заполнен</p>
+                            {% endif %}
+
+                            <h6 class="fw-bold">Для студентов с нарушениями речи</h6>
+                            {% if special_needs.speech_needs %}
+                                <ul>
+                                    {% for value in special_needs.speech_needs %}
+                                        {% for code, label in special_needs_form.SPEECH_NEEDS %}
+                                            {% if value == code %}
+                                                <li>{{ label }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted">Раздел не заполнен</p>
+                            {% endif %}
+
+                            <h6 class="fw-bold">Для студентов с нарушениями опорно-двигательного аппарата</h6>
+                            {% if special_needs.mobility_needs %}
+                                <ul>
+                                    {% for value in special_needs.mobility_needs %}
+                                        {% for code, label in special_needs_form.MOBILITY_NEEDS %}
+                                            {% if value == code %}
+                                                <li>{{ label }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted">Раздел не заполнен</p>
+                            {% endif %}
+
+                            <h6 class="fw-bold">Для всех категорий студентов</h6>
+                            {% if special_needs.general_needs %}
+                                <ul>
+                                    {% for value in special_needs.general_needs %}
+                                        {% for code, label in special_needs_form.GENERAL_NEEDS %}
+                                            {% if value == code %}
+                                                <li>{{ label }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted">Раздел не заполнен</p>
+                            {% endif %}
+
+                            <h6 class="fw-bold">Другие образовательные потребности</h6>
+                            {% if special_needs.other_educational_needs %}
+                                <p>{{ special_needs.other_educational_needs|linebreaksbr }}</p>
+                            {% else %}
+                                <p class="text-muted mb-0">Раздел не заполнен</p>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <a
+                            href="{% url 'student_special_needs' student.pk %}"
+                            class="btn btn-primary"
+                        >
+                            Редактировать сведения
+                        </a>
+                    </div>
+
+                {% else %}
+
+                    <div class="alert alert-light border text-muted">
+                        Особые образовательные потребности ещё не заполнены.
+                    </div>
+
+                    <a
+                        href="{% url 'student_special_needs' student.pk %}"
+                        class="btn btn-primary"
+                    >
+                        Заполнить сведения
+                    </a>
+
+                {% endif %}
             </div>
 
-            <div
-                class="tab-pane fade {% if active_tab == 'special_conditions' %}show active{% endif %}"
+            <div class="tab-pane fade {% if active_tab == 'special_conditions' %}show active{% endif %}"
                 id="special-conditions"
                 role="tabpanel"
-                aria-labelledby="special-conditions-tab"
-            >
+                aria-labelledby="special-conditions-tab">
 
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-3">Специальные условия обучения</h4>
 
-                    <h4 class="mb-0">
-                        Специальные условия обучения
-                    </h4>
+                {% if special_conditions %}
 
-                </div>
+                    <!-- 1. Технические средства -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Специальные технические средства обучения</strong>
+                        </div>
+                        <div class="card-body">
+                            {% if special_conditions.technical_aids %}
+                                <ul class="mb-3">
+                                    {% for code, label in special_conditions_form.TECHNICAL_AIDS %}
+                                        {% if code in special_conditions.technical_aids %}
+                                            <li>{{ label }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
 
-                <div class="alert alert-light border text-muted">
-                    Раздел специальных условий обучения будет добавлен следующим этапом.
-                </div>
+                            {% if special_conditions.other_technical_aids %}
+                                <p class="mb-0">
+                                    <strong>Другие технические средства:</strong>
+                                    {{ special_conditions.other_technical_aids|linebreaksbr }}
+                                </p>
+                            {% endif %}
 
+                            {% if not special_conditions.technical_aids and not special_conditions.other_technical_aids %}
+                                <p class="text-muted mb-0">Раздел не заполнен</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- 2. Формы контроля -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Предпочтительные формы контроля успеваемости</strong>
+                        </div>
+                        <div class="card-body">
+                            {% if special_conditions.assessment_formats %}
+                                <ul class="mb-0">
+                                    {% for code, label in special_conditions_form.ASSESSMENT_FORMATS %}
+                                        {% if code in special_conditions.assessment_formats %}
+                                            <li>{{ label }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted mb-0">Раздел не заполнен</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- 3. Условия образовательного процесса -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Условия образовательного процесса</strong>
+                        </div>
+                        <div class="card-body">
+
+                            <p><strong>Дополнительное время при аттестации:</strong>
+                                {{ special_conditions.additional_assessment_time|yesno:"Да,Нет" }}
+                            </p>
+                            <p><strong>Сопровождение образовательного процесса:</strong>
+                                {{ special_conditions.educational_support|yesno:"Да,Нет" }}
+                            </p>
+                            <p><strong>Перевод на русский жестовый язык:</strong>
+                                {{ special_conditions.sign_language_interpretation|yesno:"Да,Нет" }}
+                            </p>
+                            <p><strong>Помощь ассистента или волонтёра:</strong>
+                                {{ special_conditions.assistant_support|yesno:"Да,Нет" }}
+                            </p>
+                            <p><strong>Особый порядок освоения физической культуры:</strong>
+                                {{ special_conditions.adapted_physical_education|yesno:"Да,Нет" }}
+                            </p>
+
+                            {% if special_conditions.physical_education_preferences %}
+                                <p>
+                                    <strong>Предпочтения по физической культуре:</strong>
+                                    {{ special_conditions.physical_education_preferences|linebreaksbr }}
+                                </p>
+                            {% endif %}
+
+                            <p><strong>Дистанционные образовательные технологии:</strong>
+                                {{ special_conditions.distance_learning|yesno:"Да,Нет" }}
+                            </p>
+
+                            {% if special_conditions.other_conditions %}
+                                <p>
+                                    <strong>Другие специальные условия:</strong>
+                                    {{ special_conditions.other_conditions|linebreaksbr }}
+                                </p>
+                            {% endif %}
+
+                            <p class="mb-0">
+                                <strong>Специальные условия не требуются:</strong>
+                                {{ special_conditions.no_special_conditions_required|yesno:"Да,Нет" }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 4. Адаптированная программа -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Адаптированная образовательная программа</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                <strong>Ознакомлен с возможностью обучения:</strong>
+                                {{ special_conditions.adapted_program_informed|yesno:"Да,Нет" }}
+                            </p>
+                            <p class="mb-0">
+                                <strong>Потребность:</strong>
+                                {{ special_conditions.get_adapted_program_need_display|default:"Не указано" }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 5. Индивидуальный план -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Индивидуальный учебный план</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                <strong>Ознакомлен с возможностью обучения:</strong>
+                                {{ special_conditions.individual_plan_informed|yesno:"Да,Нет" }}
+                            </p>
+                            <p class="mb-0">
+                                <strong>Потребность:</strong>
+                                {{ special_conditions.get_individual_plan_need_display|default:"Не указано" }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 6. Согласие -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Согласие на передачу сведений преподавателям</strong>
+                        </div>
+                        <div class="card-body">
+                            {{ special_conditions.get_teacher_information_consent_display|default:"Не указано" }}
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <a href="{% url 'student_special_conditions' student.pk %}"
+                        class="btn btn-primary">
+                            Редактировать сведения
+                        </a>
+                    </div>
+
+                {% else %}
+
+                    <div class="alert alert-light border text-muted">
+                        Сведения о специальных условиях обучения ещё не заполнены.
+                    </div>
+
+                    <a href="{% url 'student_special_conditions' student.pk %}"
+                    class="btn btn-primary">
+                        Заполнить сведения
+                    </a>
+
+                {% endif %}
             </div>
 
             <div

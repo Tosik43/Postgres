@@ -4,3 +4,5 @@ from .contact_person import ContactPersonForm
 from .practice import PracticeForm
 from .student_questionnaire import StudentQuestionnaireForm
 from .disability_certificate import DisabilityCertificateForm
+from .student_special_needs import StudentSpecialNeedsForm
+from .student_special_conditions import StudentSpecialConditionsForm

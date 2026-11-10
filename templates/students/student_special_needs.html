@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="mb-1">Особые образовательные потребности</h3>
+            <div class="text-muted">
+                Студент: <strong>{{ student.full_name }}</strong>
+            </div>
+        </div>
+
+        <a href="{% url 'student_detail' student.pk %}?tab=special_needs"
+           class="btn btn-secondary">
+            ← Вернуться к карточке
+        </a>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <strong>Предоставленные документы</strong>
+            </div>
+            <div class="card-body">
+                {% for field in form %}
+                    {% if field.name == "has_ipra" or field.name == "has_pmpk_conclusion" %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold d-block">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <strong>Особенности психофизического развития</strong>
+            </div>
+            <div class="card-body">
+
+                {% for field in form %}
+                    {% if field.name == "hearing_impairment" or field.name == "vision_impairment" or field.name == "speech_impairment" or field.name == "mobility_difficulties" or field.name == "organ_system_disorders" %}
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold d-block">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="mb-3">
+                    <label for="{{ form.other_health_features.id_for_label }}"
+                           class="form-label fw-semibold">
+                        {{ form.other_health_features.label }}
+                    </label>
+                    {{ form.other_health_features }}
+                    {% for error in form.other_health_features.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <strong>Средства реабилитации и состояние здоровья</strong>
+            </div>
+            <div class="card-body">
+
+                <div class="mb-3">
+                    <label for="{{ form.rehabilitation_aids.id_for_label }}"
+                           class="form-label fw-semibold">
+                        {{ form.rehabilitation_aids.label }}
+                    </label>
+                    {{ form.rehabilitation_aids }}
+                    {% for error in form.rehabilitation_aids.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold d-block">
+                        {{ form.has_health_episodes.label }}
+                    </label>
+                    {{ form.has_health_episodes }}
+                    {% for error in form.has_health_episodes.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3" id="health-episode-actions-container">
+                    <label for="{{ form.health_episode_actions.id_for_label }}"
+                           class="form-label fw-semibold">
+                        {{ form.health_episode_actions.label }}
+                    </label>
+                    {{ form.health_episode_actions }}
+                    {% for error in form.health_episode_actions.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <strong>Особые образовательные потребности</strong>
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+                    <h5>Для студентов с нарушениями слуха</h5>
+
+                    {{ form.hearing_needs }}
+
+                    {% for error in form.hearing_needs.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-4">
+                    <h5>Для студентов с нарушениями зрения</h5>
+
+                    {% for checkbox in form.vision_needs %}
+                        {% if checkbox.data.value == "large_font" %}
+                            <div class="mb-2">
+                                {{ checkbox }}
+                            </div>
+
+                            <div class="ms-4 mb-3">
+                                <label
+                                    for="{{ form.enlarged_font_size.id_for_label }}"
+                                    class="form-label"
+                                >
+                                    Укажите размер шрифта
+                                </label>
+
+                                <div style="max-width: 180px;">
+                                    {{ form.enlarged_font_size }}
+                                </div>
+
+                                {% for error in form.enlarged_font_size.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="ms-4 mb-3">
+                                <label class="form-label fw-semibold d-block">
+                                    Предпочтительный способ восприятия учебных материалов
+                                </label>
+
+                                {{ form.preferred_material_formats }}
+
+                                {% for error in form.preferred_material_formats.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                        {% else %}
+                            <div class="mb-2">
+                                {{ checkbox }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% for error in form.vision_needs.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-4">
+                    <h5>Для студентов с нарушениями речи</h5>
+
+                    {{ form.speech_needs }}
+
+                    {% for error in form.speech_needs.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-4">
+                    <h5>Для студентов с нарушениями опорно-двигательного аппарата</h5>
+
+                    {{ form.mobility_needs }}
+
+                    {% for error in form.mobility_needs.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-4">
+                    <h5>Для всех категорий студентов</h5>
+
+                    {{ form.general_needs }}
+
+                    {% for error in form.general_needs.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    <label
+                        for="{{ form.other_educational_needs.id_for_label }}"
+                        class="form-label fw-semibold"
+                    >
+                        Другие образовательные потребности
+                    </label>
+
+                    {{ form.other_educational_needs }}
+
+                    {% for error in form.other_educational_needs.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mb-4">
+            <a href="{% url 'student_detail' student.pk %}?tab=special_needs"
+               class="btn btn-secondary">
+                Отмена
+            </a>
+
+            <button type="submit" class="btn btn-success">
+                Сохранить сведения
+            </button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}
